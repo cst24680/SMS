@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>ScholarPath - Scholarship Management System</title>
+    <title>StudyBuddy Nearby</title>
 
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -15,142 +14,85 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
-    <!-- External CSS -->
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body class="bg-slate-50 text-slate-800">
 
     <!-- Header -->
-    <header class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
 
-            <a href="#" class="logo text-2xl font-bold text-emerald-700">
-                🎓 ScholarPath
-            </a>
+            <h1 class="logo text-2xl font-bold text-emerald-700">
+                📚 StudyBuddy Nearby
+            </h1>
 
-            <nav class="hidden md:flex gap-8 text-sm font-medium text-slate-600">
-                <a href="#home" class="hover:text-emerald-600">Home</a>
-                <a href="#features" class="hover:text-emerald-600">Features</a>
-                <a href="#how-it-works" class="hover:text-emerald-600">How It Works</a>
-                <a href="#about" class="hover:text-emerald-600">About</a>
-                <a href="#apply" class="hover:text-emerald-600">Apply</a>
+            <nav>
+                <ul class="flex gap-6 text-sm font-medium">
+                    <li><a href="#home" class="hover:text-emerald-600 transition">Home</a></li>
+                    <li><a href="#features" class="hover:text-emerald-600 transition">Features</a></li>
+                    <li><a href="#about" class="hover:text-emerald-600 transition">About</a></li>
+                    <li><a href="#find" class="hover:text-emerald-600 transition">Find Buddy</a></li>
+                </ul>
             </nav>
 
-            <a href="#apply"
-                class="hidden md:inline-block bg-emerald-600 text-white px-5 py-2 rounded-full hover:bg-emerald-700">
-                Apply Now
-            </a>
         </div>
     </header>
 
+    <!-- Main Content -->
     <main>
 
         <!-- Hero Section -->
-        <section id="home" class="bg-emerald-50 py-20 px-6 text-center">
+        <section id="home" class="bg-gradient-to-br from-emerald-600 via-emerald-500 to-teal-500 py-24 px-6 text-center text-white">
+
             <div class="max-w-3xl mx-auto">
 
-                <h1 class="text-4xl md:text-5xl font-bold text-emerald-700 mb-6">
-                    Find and Apply for Scholarships Easily
-                </h1>
+                <h2 class="text-5xl md:text-6xl font-bold mb-4">
+                    Find Study Partners Near You
+                </h2>
 
-                <p class="text-lg text-slate-600 mb-8">
-                    ScholarPath helps students search for scholarships, apply online,
-                    and track their application status.
+                <p class="text-lg md:text-xl text-emerald-50 mb-8">
+                    Connect with students nearby who share your academic interests, subjects, and study goals.
                 </p>
 
-                <a href="#apply"
-                    class="bg-emerald-600 text-white px-6 py-3 rounded-lg hover:bg-emerald-700">
-                    Apply Now
+                <a href="#find"
+                   class="bg-white text-emerald-700 px-8 py-3 rounded-full font-semibold shadow-lg hover:scale-105 transition">
+                    Find a Study Buddy
                 </a>
 
-                <div class="grid grid-cols-3 gap-4 mt-12">
-
-                    <div>
-                        <h3 class="stat-number text-2xl font-bold text-emerald-700">
-                            50+
-                        </h3>
-                        <p class="text-sm text-slate-500">
-                            Scholarships
-                        </p>
-                    </div>
-
-                    <div>
-                        <h3 class="stat-number text-2xl font-bold text-emerald-700">
-                            Online
-                        </h3>
-                        <p class="text-sm text-slate-500">
-                            Applications
-                        </p>
-                    </div>
-
-                    <div>
-                        <h3 class="stat-number text-2xl font-bold text-emerald-700">
-                            24/7
-                        </h3>
-                        <p class="text-sm text-slate-500">
-                            Access
-                        </p>
-                    </div>
-
-                </div>
             </div>
+
         </section>
 
         <!-- Features -->
-        <section id="features" class="py-16 px-6 bg-white">
+        <section id="features" class="py-16 px-6">
 
-            <div class="max-w-6xl mx-auto">
+            <div class="max-w-5xl mx-auto">
 
-                <h2 class="text-3xl text-center mb-4">
+                <h2 class="text-3xl text-center mb-10">
                     Features
                 </h2>
 
-                <p class="text-center text-slate-500 mb-10">
-                    Useful features for students and administrators.
-                </p>
+                <div class="grid md:grid-cols-3 gap-6">
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-
-                    <article class="p-6 border rounded-lg shadow-sm">
-                        <h3 class="text-xl mb-2">Scholarship Search</h3>
+                    <article class="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-2 transition duration-300">
+                        <h3 class="text-xl mb-2">📍 Nearby Students</h3>
                         <p class="text-slate-500">
-                            Search scholarships based on eligibility and category.
+                            Discover study partners located near your area.
                         </p>
                     </article>
 
-                    <article class="p-6 border rounded-lg shadow-sm">
-                        <h3 class="text-xl mb-2">Online Application</h3>
+                    <article class="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-2 transition duration-300">
+                        <h3 class="text-xl mb-2">📖 Shared Subjects</h3>
                         <p class="text-slate-500">
-                            Submit scholarship applications online.
+                            Match with students studying the same subjects and courses.
                         </p>
                     </article>
 
-                    <article class="p-6 border rounded-lg shadow-sm">
-                        <h3 class="text-xl mb-2">Status Tracking</h3>
+                    <article class="bg-white p-6 rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-2 transition duration-300">
+                        <h3 class="text-xl mb-2">🤝 Study Groups</h3>
                         <p class="text-slate-500">
-                            Check application progress anytime.
-                        </p>
-                    </article>
-
-                    <article class="p-6 border rounded-lg shadow-sm">
-                        <h3 class="text-xl mb-2">Admin Dashboard</h3>
-                        <p class="text-slate-500">
-                            Manage and review student applications.
-                        </p>
-                    </article>
-
-                    <article class="p-6 border rounded-lg shadow-sm">
-                        <h3 class="text-xl mb-2">Document Upload</h3>
-                        <p class="text-slate-500">
-                            Upload certificates and required documents securely.
-                        </p>
-                    </article>
-
-                    <article class="p-6 border rounded-lg shadow-sm">
-                        <h3 class="text-xl mb-2">Notifications</h3>
-                        <p class="text-slate-500">
-                            Receive updates about scholarship deadlines.
+                            Form study groups and learn together more effectively.
                         </p>
                     </article>
 
@@ -160,112 +102,69 @@
 
         </section>
 
-        <!-- How It Works -->
-        <section id="how-it-works" class="py-16 px-6 bg-emerald-50">
-
-            <div class="max-w-4xl mx-auto text-center">
-
-                <h2 class="text-3xl mb-10">
-                    How It Works
-                </h2>
-
-                <div class="grid md:grid-cols-3 gap-8">
-
-                    <div>
-                        <div class="w-12 h-12 bg-emerald-600 text-white rounded-full flex items-center justify-center mx-auto mb-4">
-                            1
-                        </div>
-                        <h3 class="text-xl mb-2">Register</h3>
-                        <p>Create your student profile.</p>
-                    </div>
-
-                    <div>
-                        <div class="w-12 h-12 bg-emerald-600 text-white rounded-full flex items-center justify-center mx-auto mb-4">
-                            2
-                        </div>
-                        <h3 class="text-xl mb-2">Apply</h3>
-                        <p>Browse and apply for scholarships.</p>
-                    </div>
-
-                    <div>
-                        <div class="w-12 h-12 bg-emerald-600 text-white rounded-full flex items-center justify-center mx-auto mb-4">
-                            3
-                        </div>
-                        <h3 class="text-xl mb-2">Track</h3>
-                        <p>Monitor your application status.</p>
-                    </div>
-
-                </div>
-
-            </div>
-
-        </section>
-
-        <!-- About Section (Typography Plugin) -->
-        <section id="about" class="py-16 px-6 bg-white">
+        <!-- About Section -->
+        <section id="about" class="py-16 px-6 bg-emerald-50">
 
             <div class="max-w-3xl mx-auto prose prose-emerald">
 
-                <h2>About ScholarPath</h2>
+                <h2>About StudyBuddy Nearby</h2>
 
                 <p>
-                    ScholarPath is a Scholarship Management System developed
-                    using HTML5 and Tailwind CSS.
-                </p>
-
-                <p>
-                    Students can search scholarships, submit applications,
-                    and track their application status online.
+                    StudyBuddy Nearby helps students find and connect with study partners in their area. By matching students with similar academic interests, subjects, and learning goals, the platform encourages collaboration and improves learning outcomes.
                 </p>
 
                 <ul>
-                    <li>Responsive Tailwind CSS design</li>
-                    <li>HTML5 semantic elements</li>
-                    <li>Mobile-friendly layout</li>
-                    <li>Easy-to-use interface</li>
+                    <li>Find nearby study partners</li>
+                    <li>Match by subject and interests</li>
+                    <li>Create collaborative study groups</li>
                 </ul>
 
             </div>
 
         </section>
 
-        <!-- Application Form -->
-        <section id="apply" class="py-16 px-6 bg-slate-50">
+        <!-- Find Buddy Form -->
+        <section id="find" class="py-16 px-6 bg-gradient-to-b from-slate-50 to-emerald-50">
 
-            <div class="max-w-xl mx-auto">
+            <div class="max-w-lg mx-auto bg-white p-8 rounded-2xl shadow-lg border border-emerald-100">
 
-                <h2 class="text-3xl text-center mb-6">
-                    Scholarship Application
+                <h2 class="text-3xl text-center mb-6 text-emerald-700">
+                    Find Your Study Buddy
                 </h2>
 
-                <form class="bg-white p-6 rounded-lg shadow-sm space-y-4">
+                <form class="space-y-4">
 
-                    <input type="text" placeholder="Student Name"
-                        class="w-full border rounded-lg p-3">
+                    <label class="block font-medium">
+                        Student Name
+                    </label>
 
-                    <input type="text" placeholder="Roll Number"
-                        class="w-full border rounded-lg p-3">
+                    <input
+                        type="text"
+                        placeholder="Enter your name"
+                        class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-emerald-400">
 
-                    <input type="email" placeholder="Email Address"
-                        class="w-full border rounded-lg p-3">
+                    <label class="block font-medium">
+                        Subject of Interest
+                    </label>
 
-                    <input type="text" placeholder="Course"
-                        class="w-full border rounded-lg p-3">
+                    <input
+                        type="text"
+                        placeholder="e.g. Mathematics, Programming"
+                        class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-emerald-400">
 
-                    <select class="w-full border rounded-lg p-3">
-                        <option>Select Scholarship Type</option>
-                        <option>Merit Scholarship</option>
-                        <option>Need Based Scholarship</option>
-                        <option>Sports Scholarship</option>
-                    </select>
+                    <label class="block font-medium">
+                        Study Goal
+                    </label>
 
-                    <textarea rows="4"
-                        placeholder="Why are you applying for this scholarship?"
-                        class="w-full border rounded-lg p-3"></textarea>
+                    <textarea
+                        rows="4"
+                        placeholder="Describe what you want to learn or achieve"
+                        class="w-full border rounded-lg p-3 focus:ring-2 focus:ring-emerald-400"></textarea>
 
-                    <button type="submit"
-                        class="w-full bg-emerald-600 text-white py-3 rounded-lg hover:bg-emerald-700">
-                        Submit Application
+                    <button
+                        type="submit"
+                        class="w-full bg-gradient-to-r from-emerald-600 to-teal-500 text-white py-3 rounded-xl font-semibold hover:opacity-90 transition">
+                        Find Matches
                     </button>
 
                 </form>
@@ -277,23 +176,19 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-slate-900 text-white py-6">
+    <footer class="bg-slate-900 text-white text-center py-8">
 
-        <div class="max-w-6xl mx-auto text-center">
+        <p class="text-lg">
+            📚 StudyBuddy Nearby
+        </p>
 
-            <p class="logo text-lg font-semibold">
-                🎓 ScholarPath
-            </p>
+        <p class="text-slate-400 mt-2">
+            Connecting students for better learning and collaboration.
+        </p>
 
-            <p class="text-slate-400 mt-2">
-                Scholarship Management System
-            </p>
-
-            <p class="text-slate-500 text-sm mt-3">
-                © 2026 ScholarPath | Web Development Lab Project
-            </p>
-
-        </div>
+        <p class="text-slate-500 text-sm mt-3">
+            © 2026 StudyBuddy Nearby. All Rights Reserved.
+        </p>
 
     </footer>
 

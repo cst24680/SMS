@@ -2,16 +2,14 @@ body {
     font-family: 'Inter', sans-serif;
 }
 
+.logo,
 h1,
 h2,
 h3 {
     font-family: 'Playfair Display', serif;
 }
 
-.logo {
-    font-family: 'Playfair Display', serif;
-}
-
-.stat-number {
-    font-family: 'Playfair Display', serif;
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 80px;
 }
