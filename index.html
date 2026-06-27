@@ -42,7 +42,7 @@ body{
 <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
 
 <h1 class="text-2xl font-bold text-emerald-700">
-📚 StudyBuddy
+StudyBuddy
 </h1>
 
 <nav>
@@ -64,7 +64,7 @@ body{
 
 <div class="max-w-4xl mx-auto">
 
-
+<p id="welcomeMessage" class="text-lg md:text-xl font-medium mb-4 opacity-90"></p>
 
 <h2 class="text-5xl md:text-6xl font-bold mb-6">
 Find Study Partners Near You
@@ -298,7 +298,7 @@ Build friendships while studying.
 <h2 class="text-3xl text-center font-bold mb-6 text-emerald-700">
 Find Your Study Buddy
 </h2>
-
+<p id="viewportWidth" class="text-sm text-slate-500 text-center mb-4">Browser width: --</p>
 
 <form id="buddyForm" class="space-y-4" novalidate>
 
@@ -329,9 +329,7 @@ required>
 <option value="Offline">Offline</option>
 </select>
 <p id="modeError" class="text-red-500 text-sm mt-1 hidden">Please select a study mode.</p>
-
-
-</select>
+<div id="modeInfo" class="text-sm text-slate-500 mt-2">Select a study mode to see suggestions.</div>
 
 <textarea
 id="goalDesc"
@@ -640,44 +638,7 @@ Connecting students for better learning and collaboration.
   });
 </script>
 
-<script>
-// Buddy form validation: no numbers allowed in name
-const buddyFormEl = document.getElementById('buddyForm');
-const matchResultEl = document.getElementById('matchResult');
-if (buddyFormEl) {
-  buddyFormEl.addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    const name = document.getElementById('studentName').value.trim();
-    const subject = document.getElementById('subject').value.trim();
-    const mode = document.getElementById('studyMode').value;
-
-    if (name.length < 3) {
-      alert('Name must be at least 3 characters.');
-      return;
-    }
-
-    if (/\d/.test(name)) {
-      alert('Name cannot contain numbers.');
-      return;
-    }
-
-    if (subject === '') {
-      alert('Please enter a subject.');
-      return;
-    }
-
-    if (mode === '') {
-      alert('Please select a study mode.');
-      return;
-    }
-
-    // Save and show simple confirmation
-    localStorage.setItem('studentName', name);
-    matchResultEl.innerHTML = `<div class="bg-green-100 border-l-4 border-green-600 p-4 rounded-lg">Search submitted for <strong>${name}</strong> (${subject} - ${mode})</div>`;
-  });
-}
-</script>
+<!-- old/simple submit handler removed — enhanced handler below handles validation and match rendering -->
 
 <script>
 // Enhanced buddy form validation using inline errors (no native popups)
@@ -737,14 +698,48 @@ if (buddyFormEl) {
 
     if (hasError) return;
 
-    // Success
+    // Success - show dummy matches for certain subjects (e.g., maths)
     localStorage.setItem('studentName', name);
-    resultEl2.innerHTML = `
-      <div class="bg-green-100 border-l-4 border-green-600 p-4 rounded-lg">
-        <h3 class="font-bold mb-1">Search Submitted</h3>
-        <p class="text-sm">${name} — ${subject} (${mode})</p>
-      </div>
-    `;
+
+    const dummyMatches = [
+      { name: 'mathsasw21', subject: 'Mathematics', mode: 'Online', bio: 'Strong in calculus and problem solving', contact: 'mathsasw21@example.com' },
+      { name: 'calc_lover', subject: 'Mathematics', mode: 'Offline', bio: 'Prefers group study at the library', contact: 'calc_lover@example.com' }
+    ];
+
+    // simple subject match (matches maths, math, mathematics)
+    const isMath = /math/i.test(subject);
+    let found = [];
+    if (isMath) found = dummyMatches;
+
+    if (found.length) {
+      // save the first match for clipboard convenience
+      localStorage.setItem('lastMatch', JSON.stringify(found[0]));
+      resultEl2.innerHTML = `
+        <div class="bg-green-100 border-l-4 border-green-600 p-4 rounded-lg">
+          <h3 class="font-bold mb-2">Matches Found</h3>
+          ${found.map(m => `
+            <div class="bg-white rounded-lg p-3 mb-2">
+              <div class="flex justify-between items-start">
+                <div>
+                  <strong class="text-slate-800">${m.name}</strong>
+                  <div class="text-sm text-slate-600">${m.subject} — ${m.mode}</div>
+                </div>
+              </div>
+              <p class="text-sm text-slate-500 mt-2">${m.bio}</p>
+              <p class="text-xs text-slate-400 mt-2">Contact: ${m.contact}</p>
+            </div>
+          `).join('')}
+        </div>
+      `;
+    } else {
+      resultEl2.innerHTML = `
+        <div class="bg-yellow-100 border-l-4 border-yellow-600 p-4 rounded-lg">
+          <h3 class="font-bold mb-1">No Matches Found</h3>
+          <p class="text-sm">No matches for "${subject}" yet. Try a broader subject or check back later.</p>
+        </div>
+      `;
+    }
+
     buddyFormEl.reset();
   });
 }
@@ -848,7 +843,7 @@ async function showNotificationSafe(title, body) {
   if (!matchEl) return;
   const observer = new MutationObserver((mutations)=>{
     mutations.forEach(m => {
-      if (m.type === 'childList' && matchEl.innerText.trim() && matchEl.innerText.includes('Search Submitted')) {
+      if (m.type === 'childList' && matchEl.innerText.trim() && (matchEl.innerText.includes('Search Submitted') || matchEl.innerText.includes('Matches Found'))) {
         // show notification only if permission was granted
         if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
           showNotificationSafe('✅ Search Submitted', matchEl.innerText.replace(/\n/g,' ').substring(0, 100));
@@ -858,6 +853,85 @@ async function showNotificationSafe(title, body) {
   });
   observer.observe(matchEl, { childList: true, subtree: false });
 })();
+</script>
+
+<script>
+function loadWelcome() {
+  const welcomeMessage = document.getElementById('welcomeMessage');
+  if (welcomeMessage) {
+    welcomeMessage.textContent = 'Welcome to StudyBuddy! Ready to find your next study collaborator?';
+  }
+}
+
+function updateViewportWidth() {
+  const viewportWidth = document.getElementById('viewportWidth');
+  if (viewportWidth) {
+    viewportWidth.textContent = `Browser width: ${window.innerWidth}px`;
+  }
+}
+
+function updateModeDisplay() {
+  const modeInfo = document.getElementById('modeInfo');
+  const modeSelect = document.getElementById('studyMode');
+  if (!modeInfo || !modeSelect) return;
+  const selected = modeSelect.value;
+  modeInfo.textContent = selected ? `Study mode selected: ${selected}.` : 'Select a study mode to see suggestions.';
+}
+
+function attachFeatureCardHover() {
+  document.querySelectorAll('.feature-card').forEach(card => {
+    card.addEventListener('mouseover', () => {
+      card.style.transform = 'translateY(-8px) scale(1.02)';
+      card.style.boxShadow = '0 20px 50px rgba(15, 23, 42, 0.18)';
+    });
+    card.addEventListener('mouseout', () => {
+      card.style.transform = '';
+      card.style.boxShadow = '';
+    });
+  });
+}
+
+function attachInputFocusHandlers() {
+  const fields = document.querySelectorAll('#buddyForm input, #buddyForm select, #buddyForm textarea');
+  fields.forEach(field => {
+    field.addEventListener('focus', () => {
+      field.classList.add('ring-2', 'ring-emerald-500', 'ring-offset-2');
+    });
+    field.addEventListener('blur', () => {
+      field.classList.remove('ring-2', 'ring-emerald-500', 'ring-offset-2');
+    });
+  });
+}
+
+function attachProgressValidation() {
+  const progressInput = document.getElementById('progressInput');
+  const progressPercent = document.getElementById('progressPercent');
+  if (!progressInput || !progressPercent) return;
+  progressInput.addEventListener('input', function() {
+    const value = parseInt(this.value, 10);
+    progressPercent.textContent = `${value}%`;
+    if (value < 0 || value > 100) {
+      progressPercent.classList.add('text-red-600');
+    } else {
+      progressPercent.classList.remove('text-red-600');
+    }
+  });
+}
+
+window.addEventListener('load', () => {
+  loadWelcome();
+  updateViewportWidth();
+  updateModeDisplay();
+  attachFeatureCardHover();
+  attachInputFocusHandlers();
+  attachProgressValidation();
+
+  window.addEventListener('resize', updateViewportWidth);
+  const modeSelect = document.getElementById('studyMode');
+  if (modeSelect) {
+    modeSelect.addEventListener('change', updateModeDisplay);
+  }
+});
 </script>
 
 </body>
