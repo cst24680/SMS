@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudyBuddy | Sign Up</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="auth-page">
+  <div class="auth-shell">
+    <div class="auth-card">
+      <a href="index.html" class="auth-link">← Back to home</a>
+      <h1 class="auth-title">Create your account</h1>
+      <p class="auth-subtitle">Join StudyBuddy and start connecting with students who match your goals.</p>
+
+      <form id="signupForm" class="space-y-4" novalidate>
+        <div>
+          <label class="mb-2 block text-sm font-semibold text-slate-700">Full Name</label>
+          <input id="fullName" type="text" placeholder="Your name" class="input-field" required>
+          <p id="fullNameError" class="mt-1 text-sm text-red-500 hidden">Name is required.</p>
+        </div>
+        <div>
+          <label class="mb-2 block text-sm font-semibold text-slate-700">Email</label>
+          <input id="email" type="email" placeholder="you@example.com" class="input-field" required>
+          <p id="emailError" class="mt-1 text-sm text-red-500 hidden">Valid student email recommended.</p>
+        </div>
+        <div>
+          <label class="mb-2 block text-sm font-semibold text-slate-700">Password</label>
+          <input id="password" type="password" placeholder="Create a password" class="input-field" required>
+          <p id="passwordError" class="mt-1 text-sm text-red-500 hidden">Password is required (min 8 characters).</p>
+        </div>
+
+        <div>
+          <label class="mb-2 block text-sm font-semibold text-slate-700">Preferred Study Pace</label>
+          <select id="signupPace" class="input-field">
+            <option value="">(optional) Select pace</option>
+            <option value="Fast">Fast</option>
+            <option value="Moderate">Moderate</option>
+            <option value="Slow">Slow</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="mb-2 block text-sm font-semibold text-slate-700">Study Style</label>
+          <select id="signupStyle" class="input-field">
+            <option value="">(optional) Select style</option>
+            <option value="Silent">Silent co-working</option>
+            <option value="Discussion">Discussion-based</option>
+            <option value="Mixed">Mixed</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="mb-2 block text-sm font-semibold text-slate-700">Verification (optional)</label>
+          <input id="studentEmail" type="email" placeholder="your@student.edu" class="input-field">
+          <p class="mt-1 text-sm text-slate-600">We recommend verifying with your student email or uploading an optional college ID later.</p>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-full justify-center">Sign Up</button>
+      </form>
+      <script>
+        const USERS_KEY = 'studyBuddyUsers';
+
+        function getStoredUsers() {
+          try {
+            return JSON.parse(localStorage.getItem(USERS_KEY)) || [];
+          } catch (error) {
+            return [];
+          }
+        }
+
+        document.getElementById('signupForm').addEventListener('submit', function (e) {
+          e.preventDefault();
+          const name = document.getElementById('fullName').value.trim();
+          const email = document.getElementById('email').value.trim();
+          const pwd = document.getElementById('password').value;
+          const pace = document.getElementById('signupPace').value;
+          const style = document.getElementById('signupStyle').value;
+          let hasError = false;
+          if (!name || name.length < 3) { document.getElementById('fullNameError').classList.remove('hidden'); hasError = true; } else { document.getElementById('fullNameError').classList.add('hidden'); }
+          if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { document.getElementById('emailError').classList.remove('hidden'); hasError = true; } else { document.getElementById('emailError').classList.add('hidden'); }
+          if (!pwd || pwd.length < 8) { document.getElementById('passwordError').classList.remove('hidden'); hasError = true; } else { document.getElementById('passwordError').classList.add('hidden'); }
+          if (hasError) return;
+
+          const users = getStoredUsers();
+          const existingUser = users.find((user) => user.email.toLowerCase() === email.toLowerCase());
+          if (existingUser) {
+            alert('An account with this email already exists.');
+            return;
+          }
+
+          const profile = { name, email, password: pwd, pace, style };
+          const updatedUsers = [...users, profile];
+          localStorage.setItem(USERS_KEY, JSON.stringify(updatedUsers));
+          localStorage.setItem('userProfile', JSON.stringify({ name, email, pace, style }));
+          localStorage.setItem('currentUser', JSON.stringify({ name, email }));
+          alert('Account created locally (demo). Verification options available after signup.');
+          window.location.href = 'index.html';
+        });
+      </script>
+
+      <div class="auth-divider">or</div>
+      <p class="text-center text-sm text-slate-600">
+        Already have an account? <a href="login.html" class="auth-link">Log in</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>

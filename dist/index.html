@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudyBuddy | Find Your Perfect Study Partner</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" crossorigin href="/assets/index-CAnlzoZZ.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="sticky top-0 z-50 border-b border-slate-200/70 bg-white/90 backdrop-blur">
+      <div class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
+        <a href="#home" class="flex items-center gap-3">
+          <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-emerald-600 text-lg font-bold text-white shadow-lg">S</div>
+          <div>
+            <p class="text-lg font-semibold text-slate-900">StudyBuddy</p>
+            <p class="text-xs text-slate-500">Nearby learning community</p>
+          </div>
+        </a>
+        <nav>
+          <ul class="flex items-center gap-6 text-sm font-medium text-slate-600">
+            <li><a href="#home" class="nav-link">Home</a></li>
+            <li><a href="#features" class="nav-link">Features</a></li>
+            <li><a href="#about" class="nav-link">About</a></li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section id="home" class="hero-shell px-6 py-20 lg:px-8 lg:py-28">
+        <div class="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+          <div>
+            <span class="hero-badge">Trusted by 500+ students</span>
+            <p id="welcomeMessage" class="mt-4 text-lg font-medium text-emerald-100"></p>
+            <h1 class="mt-3 text-4xl font-black leading-tight text-white sm:text-5xl lg:text-6xl">
+              Find your next study partner with confidence.
+            </h1>
+            <p class="mt-6 max-w-2xl text-lg leading-8 text-emerald-50/90">
+              Meet local learners, build accountability, and turn your study sessions into focused, successful milestones.
+            </p>
+            <div class="mt-8 flex flex-wrap gap-4">
+              <a href="#features" class="btn btn-secondary">Explore Features</a>
+            </div>
+            <div class="mt-4 flex flex-wrap gap-4">
+              <a href="login.html" class="btn btn-secondary">Log In</a>
+              <a href="signup.html" class="btn btn-primary">Sign Up</a>
+            </div>
+          </div>
+
+          <div class="hero-card rounded-3xl p-6 shadow-2xl sm:p-8">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm font-semibold uppercase tracking-[0.25em] text-emerald-600">Live match preview</p>
+                <h2 class="mt-2 text-2xl font-semibold text-slate-900">Ready for your next session?</h2>
+              </div>
+              <div class="rounded-full bg-emerald-100 px-3 py-1 text-sm font-semibold text-emerald-700">New</div>
+            </div>
+            <div class="mt-6 space-y-3">
+              <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="font-semibold text-slate-900">Ava • Mathematics</p>
+                    <p class="text-sm text-slate-500">Online • Exam prep</p>
+                  </div>
+                  <span class="rounded-full bg-emerald-100 px-3 py-1 text-sm font-medium text-emerald-700">Match</span>
+                </div>
+              </div>
+              <div class="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="font-semibold text-slate-900">Noah • Programming</p>
+                    <p class="text-sm text-slate-500">Offline • Project sprint</p>
+                  </div>
+                  <span class="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium text-blue-700">Match</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 py-12 lg:px-8">
+        <div class="mx-auto grid max-w-7xl gap-6 md:grid-cols-4">
+          <div class="stat-card rounded-2xl p-6 text-center">
+            <h3 class="text-3xl font-bold text-emerald-600">500+</h3>
+            <p class="mt-2 text-sm text-slate-600">Students connected</p>
+          </div>
+          <div class="stat-card rounded-2xl p-6 text-center">
+            <h3 class="text-3xl font-bold text-emerald-600">50+</h3>
+            <p class="mt-2 text-sm text-slate-600">Subjects covered</p>
+          </div>
+          <div class="stat-card rounded-2xl p-6 text-center">
+            <h3 class="text-3xl font-bold text-emerald-600">120+</h3>
+            <p class="mt-2 text-sm text-slate-600">Active study groups</p>
+          </div>
+          <div class="stat-card rounded-2xl p-6 text-center">
+            <h3 class="text-3xl font-bold text-emerald-600">95%</h3>
+            <p class="mt-2 text-sm text-slate-600">Goal completion rate</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="bg-emerald-50 px-6 py-12 lg:px-8">
+        <div class="mx-auto max-w-4xl text-center">
+          <h2 class="text-2xl font-semibold text-slate-900">Trust & Safety</h2>
+          <p class="mt-3 text-slate-700">Lightweight verification (student email domain, optional college ID) and a clear report/block flow help build trust. Verified profiles get a badge to help you choose partners you'll actually click with.</p>
+        </div>
+      </section>
+
+      <section id="features" class="px-6 py-16 lg:px-8">
+        <div class="mx-auto max-w-7xl">
+          <div class="mx-auto max-w-2xl text-center">
+            <p class="section-label">Why it works</p>
+            <h2 class="section-title">Everything you need to study with purpose.</h2>
+            <p class="mt-4 text-lg text-slate-600">From matching to progress tracking, StudyBuddy helps you stay organized and connected.</p>
+          </div>
+          <div class="mt-12 grid gap-6 md:grid-cols-3">
+            <div class="feature-card rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+              <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100 text-2xl">📍</div>
+              <h3 class="text-xl font-semibold text-slate-900">Nearby students</h3>
+              <p class="mt-3 text-slate-600">Find like-minded learners close to you and arrange meetings effortlessly.</p>
+            </div>
+            <div class="feature-card rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+              <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-100 text-2xl">📖</div>
+              <h3 class="text-xl font-semibold text-slate-900">Shared subjects</h3>
+              <p class="mt-3 text-slate-600">Match with students who are learning the exact subjects you care about.</p>
+            </div>
+            <div class="feature-card rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+              <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-purple-100 text-2xl">🤝</div>
+              <h3 class="text-xl font-semibold text-slate-900">Structured groups</h3>
+              <p class="mt-3 text-slate-600">Coordinate study sessions, accountability, and shared milestones in one place.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="about" class="bg-slate-50 px-6 py-16 lg:px-8">
+        <div class="mx-auto grid max-w-7xl items-center gap-10 lg:grid-cols-[0.95fr_1.05fr]">
+          <div>
+            <p class="section-label">About StudyBuddy</p>
+            <h2 class="section-title">Built for students who want consistency, not chaos.</h2>
+            <p class="mt-4 text-lg leading-8 text-slate-600">StudyBuddy gives you a smoother way to connect, plan, and stay accountable. Whether you're preparing for exams or building skills for the future, the experience is designed to feel calm, useful, and professional.</p>
+          </div>
+          <div class="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+            <div class="flex flex-wrap gap-3">
+              <span class="pill">Programming</span>
+              <span class="pill">Mathematics</span>
+              <span class="pill">Data Science</span>
+              <span class="pill">AI & ML</span>
+              <span class="pill">Cyber Security</span>
+            </div>
+            <div class="mt-8 grid gap-4 sm:grid-cols-2">
+              <div class="rounded-2xl bg-emerald-50 p-4">
+                <p class="text-sm font-semibold text-emerald-700">Accountability</p>
+                <p class="mt-2 text-sm text-slate-600">Turn vague goals into clear actions with deadlines and progress tracking.</p>
+              </div>
+              <div class="rounded-2xl bg-blue-50 p-4">
+                <p class="text-sm font-semibold text-blue-700">Community</p>
+                <p class="mt-2 text-sm text-slate-600">Build friendships and study networks that support your growth.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 py-16 lg:px-8">
+        <div class="mx-auto max-w-7xl">
+          <div class="mx-auto max-w-2xl text-center">
+            <p class="section-label">What students value</p>
+            <h2 class="section-title">Simple, thoughtful, and genuinely helpful.</h2>
+          </div>
+          <div class="mt-12 grid gap-6 md:grid-cols-3">
+            <div class="soft-card rounded-3xl p-8">
+              <div class="mb-4 text-4xl">⚡</div>
+              <h3 class="text-xl font-semibold text-slate-900">Quick matching</h3>
+              <p class="mt-3 text-slate-600">Find a study partner in minutes with a streamlined experience.</p>
+            </div>
+            <div class="soft-card rounded-3xl p-8">
+              <div class="mb-4 text-4xl">🎯</div>
+              <h3 class="text-xl font-semibold text-slate-900">Goal-oriented</h3>
+              <p class="mt-3 text-slate-600">Focus on outcomes, deadlines, and progress rather than random sessions.</p>
+            </div>
+            <div class="soft-card rounded-3xl p-8">
+              <div class="mb-4 text-4xl">🌍</div>
+              <h3 class="text-xl font-semibold text-slate-900">Community learning</h3>
+              <p class="mt-3 text-slate-600">Build lasting connections with a supportive, encouraging peer network.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+
+    
+
+      <section id="goals" class="bg-white px-6 py-16 lg:px-8">
+        <div class="mx-auto max-w-7xl">
+          <div class="mx-auto max-w-2xl text-center">
+            <p class="section-label">Stay on track</p>
+            <h2 class="section-title">Track your goals with clarity.</h2>
+          </div>
+          <div class="mt-12 grid gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+            <div class="rounded-3xl border border-slate-200 bg-slate-50 p-8 shadow-sm">
+              <h3 class="text-xl font-semibold text-slate-900">Add New Goal</h3>
+              <form id="goalForm" class="mt-6 space-y-4">
+                <input id="goalInput" type="text" placeholder="Goal (e.g., Learn React)" class="input-field" required>
+                <input id="deadlineInput" type="date" class="input-field" required>
+                <div class="flex items-center gap-3">
+                  <input id="progressInput" type="range" min="0" max="100" value="0" class="flex-1">
+                  <span id="progressPercent" class="w-12 text-sm font-semibold text-emerald-600">0%</span>
+                </div>
+                <button type="submit" class="btn btn-primary w-full justify-center">Add Goal</button>
+              </form>
+            </div>
+
+            <div class="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm">
+              <h3 class="text-xl font-semibold text-slate-900">Your Goals</h3>
+              <div id="goalsContainer" class="mt-6 space-y-3">
+                <p class="py-8 text-center text-slate-500">No goals yet. Add one to get started!</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="px-6 py-16 lg:px-8">
+        <div class="mx-auto max-w-7xl">
+          <div class="mx-auto max-w-2xl text-center">
+            <p class="section-label">StudyBuddy activity</p>
+            <h2 class="section-title">Create a study session card in seconds.</h2>
+            <p class="mt-4 text-lg text-slate-600">Choose a subject, set the availability, and turn your study plan into a polished profile card.</p>
+          </div>
+          <div id="studyBuddyApp" class="mt-10"></div>
+        </div>
+      </section>
+
+      <section class="px-6 py-16 lg:px-8">
+        <div class="mx-auto max-w-7xl">
+          <div class="cta-banner rounded-3xl p-8 text-center text-white shadow-2xl sm:p-10">
+            <p class="text-sm font-semibold uppercase tracking-[0.25em] text-emerald-100">Bring your study routine to life</p>
+            <h2 class="mt-3 text-3xl font-bold sm:text-4xl">Turn scattered study time into focused momentum.</h2>
+            <p class="mx-auto mt-4 max-w-2xl text-lg text-emerald-50/90">Join StudyBuddy and make collaboration simple, productive, and genuinely enjoyable.</p>
+            <a href="signup.html" class="btn btn-secondary mt-8 inline-flex">Get Started</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="border-t border-slate-200 bg-slate-900 px-6 py-10 text-center text-white lg:px-8">
+      <h3 class="text-xl font-semibold text-emerald-400">📚 StudyBuddy Nearby</h3>
+      <p class="mt-3 text-slate-400">Connecting students for better learning and collaboration.</p>
+      <p class="mt-4 text-sm text-slate-500">© 2026 StudyBuddy Nearby. All Rights Reserved.</p>
+    </footer>
+  </div>
+
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <script type="text/babel">
+    function InfoCard({ entry, onEdit }) {
+      const isAvailable = entry.status === 'Available';
+      const statusClass = isAvailable ? 'status-pill available' : 'status-pill unavailable';
+      const cardClass = isAvailable ? 'submitted-card' : 'submitted-card unavailable';
+
+      return (
+        <div className={cardClass}>
+          <div className="card-header">
+            <div className="card-logo">SB</div>
+            <div>
+              <p className="card-eyebrow">StudyBuddy info card</p>
+              <h3 className="card-title">{entry.name}'s Study Session</h3>
+            </div>
+          </div>
+
+          <div className="card-body">
+            <div className="card-row">
+              <span>Study Buddy Name</span>
+              <strong>{entry.name}</strong>
+            </div>
+            <div className="card-row">
+              <span>Session ID</span>
+              <strong>{entry.sessionId}</strong>
+            </div>
+            <div className="card-row">
+              <span>Category</span>
+              <strong>{entry.category}</strong>
+            </div>
+            <div className="card-row">
+              <span>Status</span>
+              <span className={statusClass}>{entry.status}</span>
+            </div>
+            <div className="card-row">
+              <span>Description</span>
+              <p>{entry.description}</p>
+            </div>
+          </div>
+
+          <div className="react-actions">
+            <button type="button" className="utility-btn" onClick={onEdit}>Edit</button>
+          </div>
+        </div>
+      );
+    }
+
+    function StudyBuddyApp() {
+      const [name, setName] = React.useState('');
+      const [sessionId, setSessionId] = React.useState('');
+      const [category, setCategory] = React.useState('Programming');
+      const [status, setStatus] = React.useState('Available');
+      const [description, setDescription] = React.useState('');
+      const [submittedEntry, setSubmittedEntry] = React.useState(null);
+      const [error, setError] = React.useState('');
+
+      const handleSubmit = (event) => {
+        event.preventDefault();
+
+        if (!name.trim() || !sessionId.trim() || !description.trim()) {
+          setError('Please fill in the name, session ID, and description.');
+          return;
+        }
+
+        setSubmittedEntry({
+          name: name.trim(),
+          sessionId: sessionId.trim(),
+          category,
+          status,
+          description: description.trim()
+        });
+        setError('');
+      };
+
+      const handleReset = () => {
+        setName('');
+        setSessionId('');
+        setCategory('Programming');
+        setStatus('Available');
+        setDescription('');
+        setSubmittedEntry(null);
+        setError('');
+      };
+
+      const handleEdit = () => {
+        if (!submittedEntry) return;
+        setName(submittedEntry.name);
+        setSessionId(submittedEntry.sessionId);
+        setCategory(submittedEntry.category);
+        setStatus(submittedEntry.status);
+        setDescription(submittedEntry.description);
+        setError('');
+      };
+
+      return (
+        <div className="react-card-builder">
+          <div className="react-form-card">
+            <h3>Create StudyBuddy Session</h3>
+            <form className="react-form-grid" onSubmit={handleSubmit}>
+              <div>
+                <label className="text-xs font-semibold uppercase tracking-wide text-slate-600" htmlFor="buddyName">Name</label>
+                <input id="buddyName" className="input-field mt-1" type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Enter study buddy name" />
+              </div>
+
+              <div>
+                <label className="text-xs font-semibold uppercase tracking-wide text-slate-600" htmlFor="buddyId">ID / Code</label>
+                <input id="buddyId" className="input-field mt-1" type="text" value={sessionId} onChange={(e) => setSessionId(e.target.value)} placeholder="e.g. SB-101" />
+              </div>
+
+              <div>
+                <label className="text-xs font-semibold uppercase tracking-wide text-slate-600" htmlFor="buddyCategory">Category</label>
+                <select id="buddyCategory" className="input-field mt-1" value={category} onChange={(e) => setCategory(e.target.value)}>
+                  <option value="Programming">Programming</option>
+                  <option value="Math">Math</option>
+                  <option value="Science">Science</option>
+                  <option value="Literature">Literature</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="text-xs font-semibold uppercase tracking-wide text-slate-600">Status</label>
+                <div className="react-radio-group">
+                  <label>
+                    <input type="radio" name="buddyStatus" value="Available" checked={status === 'Available'} onChange={(e) => setStatus(e.target.value)} />
+                    Available
+                  </label>
+                  <label>
+                    <input type="radio" name="buddyStatus" value="Not Available" checked={status === 'Not Available'} onChange={(e) => setStatus(e.target.value)} />
+                    Not Available
+                  </label>
+                </div>
+              </div>
+
+              <div>
+                <label className="text-xs font-semibold uppercase tracking-wide text-slate-600" htmlFor="buddyDescription">Description</label>
+                <textarea id="buddyDescription" className="input-field mt-1" rows="4" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Describe the session or study focus" />
+              </div>
+
+              <div className="react-actions">
+                <button type="submit" className="btn btn-primary">Submit</button>
+                <button type="button" className="btn btn-secondary" onClick={handleReset}>Reset</button>
+              </div>
+            </form>
+
+            {error ? <div className="form-error">{error}</div> : null}
+          </div>
+
+          {submittedEntry ? <InfoCard entry={submittedEntry} onEdit={handleEdit} /> : null}
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById('studyBuddyApp'));
+    root.render(<StudyBuddyApp />);
+  </script>
+
+  <script>
+    let goals = JSON.parse(localStorage.getItem('studyGoals')) || [];
+    const progressInput = document.getElementById('progressInput');
+    const progressPercent = document.getElementById('progressPercent');
+
+    if (progressInput && progressPercent) {
+      progressInput.addEventListener('input', function () {
+        progressPercent.textContent = this.value + '%';
+      });
+    }
+
+    document.getElementById('goalForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      const goal = document.getElementById('goalInput').value;
+      const deadline = document.getElementById('deadlineInput').value;
+      const progress = parseInt(document.getElementById('progressInput').value);
+
+      if (goal && deadline) {
+        goals.push({
+          id: Date.now(),
+          goal,
+          deadline,
+          progress,
+          createdAt: new Date().toLocaleDateString()
+        });
+
+        localStorage.setItem('studyGoals', JSON.stringify(goals));
+        renderGoals();
+        this.reset();
+        if (progressPercent) progressPercent.textContent = '0%';
+      }
+    });
+
+    function renderGoals() {
+      const container = document.getElementById('goalsContainer');
+      if (!container) return;
+
+      if (goals.length === 0) {
+        container.innerHTML = '<p class="py-8 text-center text-slate-500">No goals yet. Add one to get started!</p>';
+        return;
+      }
+
+      goals.sort((a, b) => new Date(a.deadline) - new Date(b.deadline));
+
+      container.innerHTML = goals.map(g => {
+        const daysLeft = Math.ceil((new Date(g.deadline) - new Date()) / (1000 * 60 * 60 * 24));
+        const urgency = daysLeft <= 0 ? 'bg-red-50 border-red-200' : daysLeft <= 7 ? 'bg-yellow-50 border-yellow-200' : 'bg-emerald-50 border-emerald-200';
+
+        return `
+          <div class="rounded-2xl border p-4 shadow-sm ${urgency}" id="goal-${g.id}">
+            <div class="flex items-start justify-between gap-3">
+              <h4 class="font-semibold text-slate-800">${g.goal}</h4>
+              <div class="flex gap-2">
+                <button onclick="editGoal(${g.id})" class="text-sm text-blue-600 hover:text-blue-700">✎</button>
+                <button onclick="deleteGoal(${g.id})" class="text-sm text-red-600 hover:text-red-700">✕</button>
+              </div>
+            </div>
+            <div class="mt-3 flex items-center justify-between text-sm text-slate-600">
+              <span>Deadline: ${new Date(g.deadline).toLocaleDateString()}</span>
+              <span class="font-semibold text-emerald-600">${g.progress}%</span>
+            </div>
+            <div class="mt-3 h-2 w-full rounded-full bg-slate-200">
+              <div class="h-2 rounded-full bg-gradient-to-r from-emerald-500 to-teal-500 transition-all" style="width: ${g.progress}%"></div>
+            </div>
+            <p class="mt-2 text-xs text-slate-500">${daysLeft > 0 ? daysLeft + ' days left' : 'Overdue'}</p>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function editGoal(id) {
+      const goal = goals.find(g => g.id === id);
+      if (!goal) return;
+
+      const goalEl = document.getElementById(`goal-${id}`);
+      if (!goalEl) return;
+
+      goalEl.innerHTML = `
+        <div class="space-y-3">
+          <div>
+            <label class="text-xs font-semibold uppercase tracking-wide text-slate-600">Goal</label>
+            <input id="edit-goal-text" type="text" value="${goal.goal}" class="input-field mt-1">
+          </div>
+          <div>
+            <label class="text-xs font-semibold uppercase tracking-wide text-slate-600">Deadline</label>
+            <input id="edit-goal-deadline" type="date" value="${goal.deadline}" class="input-field mt-1">
+          </div>
+          <div>
+            <label class="text-xs font-semibold uppercase tracking-wide text-slate-600">Progress <span id="edit-progress-display">${goal.progress}%</span></label>
+            <input id="edit-goal-progress" type="range" min="0" max="100" value="${goal.progress}" class="mt-2 w-full">
+          </div>
+          <div class="flex gap-2">
+            <button onclick="saveGoal(${id})" class="flex-1 rounded-lg bg-emerald-600 px-3 py-2 text-sm font-semibold text-white">Save</button>
+            <button onclick="cancelEdit(${id})" class="flex-1 rounded-lg bg-slate-200 px-3 py-2 text-sm font-semibold text-slate-700">Cancel</button>
+          </div>
+        </div>
+      `;
+
+      document.getElementById('edit-goal-progress').addEventListener('input', function () {
+        document.getElementById('edit-progress-display').textContent = this.value + '%';
+      });
+    }
+
+    function saveGoal(id) {
+      const goal = goals.find(g => g.id === id);
+      if (!goal) return;
+
+      const newText = document.getElementById('edit-goal-text').value.trim();
+      const newDeadline = document.getElementById('edit-goal-deadline').value;
+      const newProgress = parseInt(document.getElementById('edit-goal-progress').value);
+
+      if (!newText || newText.length < 3) {
+        alert('Goal must be at least 3 characters.');
+        return;
+      }
+      if (!newDeadline) {
+        alert('Deadline is required.');
+        return;
+      }
+      if (isNaN(newProgress) || newProgress < 0 || newProgress > 100) {
+        alert('Progress must be between 0 and 100.');
+        return;
+      }
+
+      goal.goal = newText;
+      goal.deadline = newDeadline;
+      goal.progress = newProgress;
+
+      localStorage.setItem('studyGoals', JSON.stringify(goals));
+      renderGoals();
+    }
+
+    function cancelEdit(id) {
+      renderGoals();
+    }
+
+    function deleteGoal(id) {
+      goals = goals.filter(g => g.id !== id);
+      localStorage.setItem('studyGoals', JSON.stringify(goals));
+      renderGoals();
+    }
+
+    renderGoals();
+
+    const btn = document.getElementById('btn');
+
+if (btn) {
+    btn.addEventListener('click', function () {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                const lat = position.coords.latitude.toFixed(6);
+                const lon = position.coords.longitude.toFixed(6);
+
+                alert(`Latitude: ${lat}\nLongitude: ${lon}`);
+            });
+        }
+    });
+}
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function (position) {
+          const lat = position.coords.latitude.toFixed(6);
+          const lon = position.coords.longitude.toFixed(6);
+          const msg = `📍 Location Successfully Found\n\nLatitude: ${lat}\nLongitude: ${lon}`;
+          alert(msg);
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(`${lat},${lon}`).catch(() => {});
+          }
+          if (window.Notification && Notification.permission === 'granted') {
+            new Notification('✅ Location Found', { body: `Lat: ${lat}, Lon: ${lon}` });
+          }
+        }, function () {
+          alert('❌ Unable to retrieve location. Please enable location permissions.');
+        });
+      } else {
+        alert('⚠️ Geolocation is not supported by your browser.');
+      }
+    });
+  </script>
+
+  <script>
+   
+    const resultEl2 = document.getElementById('matchResult');
+
+    function showError(fieldId, message) {
+      const el = document.getElementById(fieldId + 'Error');
+      if (el) {
+        el.textContent = message;
+        el.classList.remove('hidden');
+      }
+    }
+
+    function clearError(fieldId) {
+      const el = document.getElementById(fieldId + 'Error');
+      if (el) {
+        el.textContent = '';
+        el.classList.add('hidden');
+      }
+    }
+
+    if (buddyFormEl) {
+      ['studentName', 'subject', 'studyMode', 'goalDesc'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener('input', () => clearError(id));
+      });
+
+      buddyFormEl.addEventListener('submit', function (e) {
+        e.preventDefault();
+
+        const name = document.getElementById('studentName').value.trim();
+        const subject = document.getElementById('subject').value.trim();
+        const mode = document.getElementById('studyMode').value;
+        const desc = document.getElementById('goalDesc').value.trim();
+
+        let hasError = false;
+
+        if (!name) { showError('studentName', 'Name is required.'); hasError = true; }
+        else if (name.length < 3) { showError('studentName', 'Name must be at least 3 characters.'); hasError = true; }
+        else if (name.length > 50) { showError('studentName', 'Name is too long (max 50 characters).'); hasError = true; }
+        else if (/\d/.test(name)) { showError('studentName', 'Name cannot contain numbers.'); hasError = true; }
+
+        if (!subject) { showError('subject', 'Subject is required.'); hasError = true; }
+        else if (subject.length < 2) { showError('subject', 'Subject must be at least 2 characters.'); hasError = true; }
+        else if (subject.length > 100) { showError('subject', 'Subject is too long (max 100 characters).'); hasError = true; }
+        else if (/\d/.test(subject)) { showError('subject', 'Subject cannot contain numbers.'); hasError = true; }
+
+        if (!mode) { showError('mode', 'Please select a study mode.'); hasError = true; }
+
+        if (!desc) { showError('desc', 'Study goal description is required.'); hasError = true; }
+        else if (desc.length < 10) { showError('desc', 'Description must be at least 10 characters.'); hasError = true; }
+        else if (desc.length > 500) { showError('desc', 'Description is too long (max 500 characters).'); hasError = true; }
+
+          if (hasError) return;
+
+        localStorage.setItem('studentName', name);
+
+        const dummyMatches = [
+          { name: 'mathsasw21', subject: 'Mathematics', mode: 'Online', bio: 'Strong in calculus and problem solving', contact: 'mathsasw21@example.com' },
+          { name: 'calc_lover', subject: 'Mathematics', mode: 'Offline', bio: 'Prefers group study at the library', contact: 'calc_lover@example.com' }
+        ];
+
+        const isMath = /math/i.test(subject);
+        let found = [];
+        if (isMath) found = dummyMatches;
+
+        if (found.length) {
+          localStorage.setItem('lastMatch', JSON.stringify(found[0]));
+          // include preference summary with results
+          const prefs = {
+            pace: document.getElementById('studyPace') ? document.getElementById('studyPace').value : '',
+            time: document.getElementById('preferredTime') ? document.getElementById('preferredTime').value : '',
+            style: document.getElementById('studyStyle') ? document.getElementById('studyStyle').value : '',
+            goalType: document.getElementById('goalType') ? document.getElementById('goalType').value : ''
+          };
+
+          resultEl2.innerHTML = `
+            <div class="rounded-2xl border border-emerald-200 bg-emerald-50 p-4">
+              <h3 class="font-semibold text-emerald-800">Matches Found</h3>
+              <div class="mt-2 text-sm text-slate-600">Preferences: ${prefs.pace || 'Any pace'} • ${prefs.time || 'Any time'} • ${prefs.style || 'Any style'} • ${prefs.goalType || 'Any goal'}</div>
+              ${found.map(m => `
+                <div class="mt-3 rounded-xl bg-white p-3 shadow-sm">
+                  <div class="flex items-start justify-between gap-3">
+                    <div>
+                      <strong class="text-slate-800">${m.name}</strong>
+                      <div class="text-sm text-slate-600">${m.subject} — ${m.mode}</div>
+                    </div>
+                  </div>
+                  <p class="mt-2 text-sm text-slate-500">${m.bio}</p>
+                  <p class="mt-2 text-xs text-slate-400">Contact: ${m.contact}</p>
+                  <div class="mt-2 text-xs text-slate-400">Report or block this user: <button class="text-red-600 text-sm" onclick="reportUser('${m.name}')">Report</button> • <button class="text-slate-800 text-sm" onclick="blockUser('${m.name}')">Block</button></div>
+                </div>
+              `).join('')}
+            </div>
+          `;
+        } else {
+          resultEl2.innerHTML = `
+            <div class="rounded-2xl border border-yellow-200 bg-yellow-50 p-4">
+              <h3 class="font-semibold text-yellow-800">No Matches Found</h3>
+              <p class="mt-2 text-sm text-slate-600">No matches for "${subject}" yet. Try a broader subject or check back later.</p>
+            </div>
+          `;
+        }
+
+        buddyFormEl.reset();
+      });
+    }
+  </script>
+
+  <script>
+    async function copyText(text) {
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(text);
+          return true;
+        }
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
+
+    async function ensureNotificationPermission() {
+      if (!('Notification' in window)) return false;
+      if (Notification.permission === 'granted') return true;
+      if (Notification.permission !== 'denied') {
+        const p = await Notification.requestPermission();
+        return p === 'granted';
+      }
+      return false;
+    }
+
+    const copyNameBtn = document.getElementById('copyNameBtn');
+    const copyMatchBtn = document.getElementById('copyMatchBtn');
+    copyNameBtn && copyNameBtn.addEventListener('click', async () => {
+      const name = localStorage.getItem('studentName') || document.getElementById('studentName').value || '';
+      if (!name) {
+        alert('No name to copy.');
+        return;
+      }
+      const ok = await copyText(name);
+      if (ok) {
+        copyNameBtn.textContent = 'Copied!';
+        setTimeout(() => copyNameBtn.textContent = '📋 Copy Name', 1000);
+      }
+    });
+
+    copyMatchBtn && copyMatchBtn.addEventListener('click', async () => {
+      const matchHtml = document.getElementById('matchResult').innerText || '';
+      if (!matchHtml) { alert('No match to copy.'); return; }
+      const ok = await copyText(matchHtml);
+      if (ok) { copyMatchBtn.textContent = 'Copied!'; setTimeout(() => copyMatchBtn.textContent = '📋 Copy Match', 1000); }
+    });
+
+    const enableNotifBtn = document.getElementById('enableNotifBtn');
+    enableNotifBtn && enableNotifBtn.addEventListener('click', async () => {
+      const ok = await ensureNotificationPermission();
+      if (ok) {
+        enableNotifBtn.innerHTML = '✓ Notifications ON';
+        enableNotifBtn.style.backgroundColor = '#dcfce7';
+        setTimeout(() => {
+          enableNotifBtn.innerHTML = '🔔 Notifications';
+          enableNotifBtn.style.backgroundColor = '';
+        }, 2000);
+        showNotificationSafe('Success', 'Notifications are enabled!');
+      } else {
+        enableNotifBtn.innerHTML = '✗ Blocked';
+        enableNotifBtn.style.backgroundColor = '#fee2e2';
+        setTimeout(() => {
+          enableNotifBtn.innerHTML = '🔔 Notifications';
+          enableNotifBtn.style.backgroundColor = '';
+        }, 2000);
+      }
+    });
+
+    async function showNotificationSafe(title, body) {
+      if (!('Notification' in window)) return false;
+      if (Notification.permission !== 'granted') {
+        const ok = await ensureNotificationPermission();
+        if (!ok) return false;
+      }
+      try { new Notification(title, { body }); return true; } catch (e) { return false; }
+    }
+
+    (function hookSearchNotification() {
+      const matchEl = document.getElementById('matchResult');
+      if (!matchEl) return;
+      const observer = new MutationObserver((mutations) => {
+        mutations.forEach(() => {
+          if (matchEl.innerText.trim() && (matchEl.innerText.includes('Matches Found') || matchEl.innerText.includes('Search Submitted'))) {
+            if (typeof Notification !== 'undefined' && Notification.permission === 'granted') {
+              showNotificationSafe('✅ Search Submitted', matchEl.innerText.replace(/\n/g, ' ').substring(0, 100));
+            }
+          }
+        });
+      });
+      observer.observe(matchEl, { childList: true, subtree: false });
+    })();
+  </script>
+
+  <script>
+    function reportUser(name) {
+      alert('Report submitted for ' + name + '. Our team will review the report.');
+    }
+
+    function blockUser(name) {
+      let blocked = JSON.parse(localStorage.getItem('blockedUsers') || '[]');
+      if (!blocked.includes(name)) {
+        blocked.push(name);
+        localStorage.setItem('blockedUsers', JSON.stringify(blocked));
+      }
+      alert(name + ' has been blocked. They will not appear in future searches.');
+      // simple UI refresh to remove blocked user from current results
+      const matchEl = document.getElementById('matchResult');
+      if (matchEl) {
+        matchEl.querySelectorAll('strong').forEach(s => {
+          if (blocked.includes(s.textContent)) s.closest('.rounded-xl').remove();
+        });
+      }
+    }
+  </script>
+
+  <script>
+    function loadWelcome() {
+      const welcomeMessage = document.getElementById('welcomeMessage');
+      if (welcomeMessage) {
+        welcomeMessage.textContent = 'Welcome to StudyBuddy! Ready to find your next study collaborator?';
+      }
+    }
+
+    function updateViewportWidth() {
+      const viewportWidth = document.getElementById('viewportWidth');
+      if (viewportWidth) {
+        viewportWidth.textContent = `Browser width: ${window.innerWidth}px`;
+      }
+    }
+
+    function updateModeDisplay() {
+      const modeInfo = document.getElementById('modeInfo');
+      const modeSelect = document.getElementById('studyMode');
+      if (!modeInfo || !modeSelect) return;
+      const selected = modeSelect.value;
+      modeInfo.textContent = selected ? `Study mode selected: ${selected}.` : 'Select a study mode to see suggestions.';
+    }
+
+    function attachFeatureCardHover() {
+      document.querySelectorAll('.feature-card').forEach(card => {
+        card.addEventListener('mouseover', () => {
+          card.style.transform = 'translateY(-8px) scale(1.02)';
+          card.style.boxShadow = '0 20px 50px rgba(15, 23, 42, 0.18)';
+        });
+        card.addEventListener('mouseout', () => {
+          card.style.transform = '';
+          card.style.boxShadow = '';
+        });
+      });
+    }
+
+    function attachInputFocusHandlers() {
+      const fields = document.querySelectorAll('#buddyForm input, #buddyForm select, #buddyForm textarea');
+      fields.forEach(field => {
+        field.addEventListener('focus', () => {
+          field.classList.add('ring-2', 'ring-emerald-500', 'ring-offset-2');
+        });
+        field.addEventListener('blur', () => {
+          field.classList.remove('ring-2', 'ring-emerald-500', 'ring-offset-2');
+        });
+      });
+    }
+
+    function attachProgressValidation() {
+      const progressInput = document.getElementById('progressInput');
+      const progressPercent = document.getElementById('progressPercent');
+      if (!progressInput || !progressPercent) return;
+      progressInput.addEventListener('input', function () {
+        const value = parseInt(this.value, 10);
+        progressPercent.textContent = `${value}%`;
+        if (value < 0 || value > 100) {
+          progressPercent.classList.add('text-red-600');
+        } else {
+          progressPercent.classList.remove('text-red-600');
+        }
+      });
+    }
+
+    window.addEventListener('load', () => {
+      loadWelcome();
+      updateViewportWidth();
+      updateModeDisplay();
+      attachFeatureCardHover();
+      attachInputFocusHandlers();
+      attachProgressValidation();
+
+      window.addEventListener('resize', updateViewportWidth);
+      const modeSelect = document.getElementById('studyMode');
+      if (modeSelect) {
+        modeSelect.addEventListener('change', updateModeDisplay);
+      }
+    });
+  </script>
+</body>
+</html>

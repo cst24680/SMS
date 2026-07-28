@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudyBuddy | Log In</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="auth-page">
+  <div class="auth-shell">
+    <div class="auth-card">
+      <a href="index.html" class="auth-link">← Back to home</a>
+      <h1 class="auth-title">Welcome back</h1>
+      <p class="auth-subtitle">Log in to continue your study journey and access your goals.</p>
+
+      <form id="loginForm" class="space-y-4">
+        <div>
+          <label class="mb-2 block text-sm font-semibold text-slate-700">Email</label>
+          <input id="loginEmail" type="email" placeholder="you@example.com" class="input-field" required>
+        </div>
+        <div>
+          <label class="mb-2 block text-sm font-semibold text-slate-700">Password</label>
+          <input id="loginPassword" type="password" placeholder="Enter your password" class="input-field" required>
+        </div>
+        <button type="submit" class="btn btn-primary w-full justify-center">Log In</button>
+      </form>
+
+      <script src="app.js"></script>
+
+      <div class="auth-divider">or</div>
+      <p class="text-center text-sm text-slate-600">
+        New here? <a href="signup.html" class="auth-link">Create an account</a>
+      </p>
+    </div>
+  </div>
+</body>
+</html>
