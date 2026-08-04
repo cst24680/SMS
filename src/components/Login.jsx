@@ -4,6 +4,7 @@ function Login({ onLogin, error, success }) {
   const [formData, setFormData] = useState({ email: '', password: '' });
   const [focusedField, setFocusedField] = useState('');
   const [inputMessage, setInputMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleChange = (e) => {
     setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -25,7 +26,10 @@ function Login({ onLogin, error, success }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    setInputMessage('Signing you in...');
     await onLogin(formData);
+    setIsSubmitting(false);
   };
 
   return (
@@ -59,7 +63,7 @@ function Login({ onLogin, error, success }) {
             required
           />
           {inputMessage ? <p className="text-sm text-slate-500">{inputMessage}</p> : null}
-          <button type="submit" className="btn btn-primary w-full" onMouseOver={() => setInputMessage('Click to sign in')} onFocus={() => setInputMessage('Click to sign in')}>Log In</button>
+          <button type="submit" disabled={isSubmitting} className="btn btn-primary w-full disabled:cursor-not-allowed disabled:opacity-70">{isSubmitting ? 'Signing in...' : 'Log In'}</button>
         </form>
         {error ? <p className="mt-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-600">{error}</p> : null}
         {success ? <p className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">{success}</p> : null}

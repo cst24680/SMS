@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 function Signup({ onSignup, error, success }) {
-  const [formData, setFormData] = useState({ fullName: '', email: '', password: '', age: '', institution: '' });
+  const [formData, setFormData] = useState({ fullName: '', email: '', password: '', age: '', institution: '', subjects: '', location: '', studyMode: 'Individual' });
   const [focusedField, setFocusedField] = useState('');
   const [inputMessage, setInputMessage] = useState('');
 
@@ -48,6 +48,18 @@ function Signup({ onSignup, error, success }) {
             className={`input-field ${focusedField === 'fullName' ? 'border-emerald-500 ring-1 ring-emerald-200' : ''}`}
             required
           />
+          <div className="grid gap-4 sm:grid-cols-2">
+            <input name="subjects" value={formData.subjects} onChange={handleChange} onInput={handleInput} onFocus={() => handleFocus('subjects')} onBlur={handleBlur} placeholder="Subjects: e.g. Programming, Maths" className={`input-field ${focusedField === 'subjects' ? 'border-emerald-500 ring-1 ring-emerald-200' : ''}`} required />
+            <input name="location" value={formData.location} onChange={handleChange} onInput={handleInput} onFocus={() => handleFocus('location')} onBlur={handleBlur} placeholder="City: e.g. Kochi" className={`input-field ${focusedField === 'location' ? 'border-emerald-500 ring-1 ring-emerald-200' : ''}`} required />
+          </div>
+          <div>
+            <label className="mb-2 block text-sm font-semibold text-slate-700">Preferred study setting</label>
+            <select name="studyMode" value={formData.studyMode} onChange={handleChange} className="input-field">
+              <option value="Individual">Individual</option>
+              <option value="Group">Group</option>
+              <option value="Online">Online</option>
+            </select>
+          </div>
           <input
             name="email"
             type="email"

@@ -6,7 +6,43 @@
       "password": "pass.1234",
       "age": "21",
       "institution": "SCMS",
+      "subjects": "Programming, Mathematics",
+      "location": "Kochi",
+      "studyMode": "Individual",
       "id": 1
+    },
+    {
+      "id": 2,
+      "fullName": "Mia Joseph",
+      "email": "mia@example.com",
+      "password": "pass.1234",
+      "age": "20",
+      "institution": "SCMS",
+      "subjects": "Programming, Web Development",
+      "location": "Kochi",
+      "studyMode": "Individual"
+    },
+    {
+      "id": 3,
+      "fullName": "Arjun Nair",
+      "email": "arjun@example.com",
+      "password": "pass.1234",
+      "age": "21",
+      "institution": "CUSAT",
+      "subjects": "Mathematics, Physics",
+      "location": "Kochi",
+      "studyMode": "Group"
+    },
+    {
+      "id": 4,
+      "fullName": "Nia Thomas",
+      "email": "nia@example.com",
+      "password": "pass.1234",
+      "age": "22",
+      "institution": "Christ University",
+      "subjects": "Programming, Data Science",
+      "location": "Bengaluru",
+      "studyMode": "Online"
     }
   ],
   "goals": [
@@ -19,6 +55,50 @@
       "priority": "Medium",
       "userId": 1,
       "id": 1
+    },
+    {
+      "title": "Complete Chem unit 1 and unit 2",
+      "subject": "Chemistry",
+      "deadline": "2026-08-14",
+      "dailyHours": "5",
+      "studyMode": "Individual",
+      "priority": "Medium",
+      "userId": 1,
+      "id": 2
+    },
+    {
+      "title": "Learn maths",
+      "subject": "Alegbra",
+      "deadline": "2026-08-19",
+      "dailyHours": "2",
+      "studyMode": "Individual",
+      "priority": "Medium",
+      "userId": 1,
+      "id": 3
     }
-  ]
+  ],
+  "partnerRequests": [
+    {
+      "fromUserId": 1,
+      "toUserId": 2,
+      "status": "sent",
+      "createdAt": "2026-08-04T07:37:12.038Z",
+      "id": 1
+    },
+    {
+      "fromUserId": 2,
+      "toUserId": 1,
+      "status": "sent",
+      "createdAt": "2026-08-04T07:42:10.604Z",
+      "id": 2
+    },
+    {
+      "fromUserId": 1,
+      "toUserId": 2,
+      "status": "sent",
+      "createdAt": "2026-08-04T07:42:32.740Z",
+      "id": 3
+    }
+  ],
+  "calendarEvents": []
 }

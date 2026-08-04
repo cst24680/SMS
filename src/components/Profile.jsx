@@ -9,6 +9,9 @@ function Profile({ profile }) {
         <p><span className="font-semibold text-slate-800">Email:</span> {profile.email}</p>
         <p><span className="font-semibold text-slate-800">Age:</span> {profile.age || 'Not set'}</p>
         <p><span className="font-semibold text-slate-800">Institution:</span> {profile.institution || 'Not set'}</p>
+        <p><span className="font-semibold text-slate-800">Subjects:</span> {profile.subjects || 'Not set'}</p>
+        <p><span className="font-semibold text-slate-800">Location:</span> {profile.location || 'Not set'}</p>
+        <p><span className="font-semibold text-slate-800">Study setting:</span> {profile.studyMode || 'Not set'}</p>
       </div>
     </section>
   );
