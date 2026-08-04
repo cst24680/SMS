@@ -6,99 +6,95 @@ import Signup from './components/Signup';
 import Dashboard from './components/Dashboard';
 import Footer from './components/Footer';
 
-const USERS_KEY = 'studyBuddyUsers';
 const CURRENT_USER_KEY = 'currentUser';
-const STUDY_GOALS_KEY = 'studyGoals';
 const USER_PROFILE_KEY = 'userProfile';
+
+async function request(path, options = {}) {
+  const response = await fetch(`/api${path}`, {
+    headers: { 'Content-Type': 'application/json', ...options.headers },
+    ...options,
+  });
+
+  if (!response.ok) {
+    throw new Error('Unable to connect to the StudyBuddy data server. Start it with npm run api.');
+  }
+
+  return response.status === 204 ? null : response.json();
+}
 
 function App() {
   const [view, setView] = useState('home');
-  const [users, setUsers] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem(USERS_KEY)) || [];
-    } catch {
-      return [];
-    }
-  });
+  const [users, setUsers] = useState([]);
   const [currentUser, setCurrentUser] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem(CURRENT_USER_KEY)) || null;
-    } catch {
-      return null;
-    }
+    try { return JSON.parse(localStorage.getItem(CURRENT_USER_KEY)) || null; } catch { return null; }
   });
   const [profile, setProfile] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem(USER_PROFILE_KEY)) || null;
-    } catch {
-      return null;
-    }
+    try { return JSON.parse(localStorage.getItem(USER_PROFILE_KEY)) || null; } catch { return null; }
   });
-  const [goals, setGoals] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem(STUDY_GOALS_KEY)) || [];
-    } catch {
-      return [];
-    }
-  });
+  const [goals, setGoals] = useState([]);
   const [authError, setAuthError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
+  const [dataError, setDataError] = useState('');
 
   useEffect(() => {
-    localStorage.setItem(USERS_KEY, JSON.stringify(users));
-  }, [users]);
+    const loadData = async () => {
+      try {
+        const [storedUsers, storedGoals] = await Promise.all([request('/users'), request('/goals')]);
+        setUsers(storedUsers);
+        setGoals(storedGoals);
+        setDataError('');
+      } catch (error) {
+        setDataError(error.message);
+      }
+    };
+    loadData();
+  }, []);
 
   useEffect(() => {
-    localStorage.setItem(STUDY_GOALS_KEY, JSON.stringify(goals));
-  }, [goals]);
-
-  useEffect(() => {
-    if (currentUser) {
-      localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(currentUser));
-    } else {
-      localStorage.removeItem(CURRENT_USER_KEY);
-    }
+    if (currentUser) localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(currentUser));
+    else localStorage.removeItem(CURRENT_USER_KEY);
   }, [currentUser]);
 
   useEffect(() => {
-    if (profile) {
-      localStorage.setItem(USER_PROFILE_KEY, JSON.stringify(profile));
-    } else {
-      localStorage.removeItem(USER_PROFILE_KEY);
-    }
+    if (profile) localStorage.setItem(USER_PROFILE_KEY, JSON.stringify(profile));
+    else localStorage.removeItem(USER_PROFILE_KEY);
   }, [profile]);
 
-  const handleSignup = ({ fullName, email, password, pace, style }) => {
+  const handleSignup = async ({ fullName, email, password, age, institution }) => {
     const normalizedEmail = email.trim().toLowerCase();
-    const existingUser = users.find((user) => user.email.toLowerCase() === normalizedEmail);
-
-    if (existingUser) {
+    if (users.some((user) => user.email.toLowerCase() === normalizedEmail)) {
       setAuthError('An account with this email already exists.');
       return false;
     }
 
-    const newUser = { id: Date.now(), fullName, email: normalizedEmail, password, pace, style };
-    const updatedUsers = [...users, newUser];
-    setUsers(updatedUsers);
-    setCurrentUser({ id: newUser.id, fullName, email: normalizedEmail });
-    setProfile({ fullName, email: normalizedEmail, pace, style });
-    setAuthError('');
-    setSuccessMessage('Account created successfully!');
-    setView('dashboard');
-    return true;
+    try {
+      const newUser = await request('/users', {
+        method: 'POST',
+        body: JSON.stringify({ fullName, email: normalizedEmail, password, age, institution }),
+      });
+      setUsers((previous) => [...previous, newUser]);
+      setCurrentUser({ id: newUser.id, fullName, email: normalizedEmail });
+      setProfile({ fullName, email: normalizedEmail, age, institution });
+      setAuthError('');
+      setSuccessMessage('Account created successfully!');
+      setView('dashboard');
+      return true;
+    } catch (error) {
+      setAuthError(error.message);
+      return false;
+    }
   };
 
-  const handleLogin = ({ email, password }) => {
+  const handleLogin = async ({ email, password }) => {
     const normalizedEmail = email.trim().toLowerCase();
     const foundUser = users.find((user) => user.email.toLowerCase() === normalizedEmail && user.password === password);
-
     if (!foundUser) {
       setAuthError('Invalid email or password.');
       return false;
     }
 
     setCurrentUser({ id: foundUser.id, fullName: foundUser.fullName, email: foundUser.email });
-    setProfile({ fullName: foundUser.fullName, email: foundUser.email, pace: foundUser.pace || '', style: foundUser.style || '' });
+    setProfile({ fullName: foundUser.fullName, email: foundUser.email, age: foundUser.age || '', institution: foundUser.institution || '' });
     setAuthError('');
     setSuccessMessage('Welcome back!');
     setView('dashboard');
@@ -112,20 +108,38 @@ function App() {
     setSuccessMessage('You have been logged out.');
   };
 
-  const addGoal = (goal) => {
-    const newGoal = { id: Date.now(), ...goal };
-    setGoals((prev) => [newGoal, ...prev]);
-    setSuccessMessage('Goal added successfully.');
+  const addGoal = async (goal) => {
+    try {
+      const newGoal = await request('/goals', { method: 'POST', body: JSON.stringify({ ...goal, userId: currentUser.id }) });
+      setGoals((previous) => [newGoal, ...previous]);
+      setSuccessMessage('Goal added successfully.');
+      return true;
+    } catch (error) {
+      setDataError(error.message);
+      return false;
+    }
   };
 
-  const updateGoal = (goalId, updatedGoal) => {
-    setGoals((prev) => prev.map((goal) => (goal.id === goalId ? { ...goal, ...updatedGoal } : goal)));
-    setSuccessMessage('Goal updated successfully.');
+  const updateGoal = async (goalId, updatedGoal) => {
+    try {
+      const savedGoal = await request(`/goals/${goalId}`, { method: 'PUT', body: JSON.stringify({ ...updatedGoal, userId: currentUser.id }) });
+      setGoals((previous) => previous.map((goal) => (goal.id === goalId ? savedGoal : goal)));
+      setSuccessMessage('Goal updated successfully.');
+      return true;
+    } catch (error) {
+      setDataError(error.message);
+      return false;
+    }
   };
 
-  const deleteGoal = (goalId) => {
-    setGoals((prev) => prev.filter((goal) => goal.id !== goalId));
-    setSuccessMessage('Goal deleted successfully.');
+  const deleteGoal = async (goalId) => {
+    try {
+      await request(`/goals/${goalId}`, { method: 'DELETE' });
+      setGoals((previous) => previous.filter((goal) => goal.id !== goalId));
+      setSuccessMessage('Goal deleted successfully.');
+    } catch (error) {
+      setDataError(error.message);
+    }
   };
 
   return (
@@ -135,17 +149,7 @@ function App() {
         {view === 'home' && <Home setView={setView} />}
         {view === 'login' && <Login onLogin={handleLogin} error={authError} success={successMessage} />}
         {view === 'signup' && <Signup onSignup={handleSignup} error={authError} success={successMessage} />}
-        {view === 'dashboard' && currentUser && (
-          <Dashboard
-            currentUser={currentUser}
-            profile={profile}
-            goals={goals}
-            addGoal={addGoal}
-            updateGoal={updateGoal}
-            deleteGoal={deleteGoal}
-            success={successMessage}
-          />
-        )}
+        {view === 'dashboard' && currentUser && <Dashboard currentUser={currentUser} profile={profile} goals={goals} addGoal={addGoal} updateGoal={updateGoal} deleteGoal={deleteGoal} success={successMessage} dataError={dataError} />}
       </main>
       <Footer />
     </div>

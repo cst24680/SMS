@@ -13,6 +13,7 @@ function GoalForm({ onSubmit, editingGoal, onCancel }) {
   const [formData, setFormData] = useState(initialGoal);
   const [focusedField, setFocusedField] = useState('');
   const [inputMessages, setInputMessages] = useState({});
+  const [submitMessage, setSubmitMessage] = useState('');
 
   useEffect(() => {
     if (editingGoal) {
@@ -40,13 +41,17 @@ function GoalForm({ onSubmit, editingGoal, onCancel }) {
     setFocusedField('');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.title.trim() || !formData.subject.trim() || !formData.deadline || !formData.dailyHours) {
+      setSubmitMessage('Complete all required fields before saving.');
       return;
     }
-    onSubmit(formData);
-    setFormData(initialGoal);
+    const wasSaved = await onSubmit(formData);
+    if (wasSaved) {
+      setFormData(initialGoal);
+      setSubmitMessage('');
+    }
   };
 
   return (
@@ -145,6 +150,7 @@ function GoalForm({ onSubmit, editingGoal, onCancel }) {
         <button type="submit" className="btn btn-primary">{editingGoal ? 'Update Goal' : 'Add Goal'}</button>
         {editingGoal ? <button type="button" onClick={onCancel} className="btn btn-secondary">Cancel</button> : null}
       </div>
+      {submitMessage ? <p className="text-sm text-red-600">{submitMessage}</p> : null}
     </form>
   );
 }

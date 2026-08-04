@@ -1,10 +1,7 @@
-function GoalCard({ goal, onEdit, onDelete }) {
-  const handleMouseOver = () => {
-    console.log(`Hovered over goal: ${goal.title}`);
-  };
+function GoalCard({ goal, onEdit, onDelete, onHover }) {
 
   return (
-    <div onMouseOver={handleMouseOver} className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm hover:border-emerald-300">
+    <div onMouseOver={() => onHover(goal.title)} onMouseOut={() => onHover('')} className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition hover:border-emerald-300 hover:shadow-md">
       <div className="flex items-start justify-between gap-3">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.24em] text-emerald-600">{goal.subject}</p>

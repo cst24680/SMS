@@ -23,9 +23,9 @@ function Login({ onLogin, error, success }) {
     setInputMessage('');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    onLogin(formData);
+    await onLogin(formData);
   };
 
   return (

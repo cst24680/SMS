@@ -7,8 +7,8 @@ function Profile({ profile }) {
       <div className="mt-4 space-y-2 text-sm text-slate-600">
         <p><span className="font-semibold text-slate-800">Name:</span> {profile.fullName}</p>
         <p><span className="font-semibold text-slate-800">Email:</span> {profile.email}</p>
-        <p><span className="font-semibold text-slate-800">Study Pace:</span> {profile.pace || 'Not set'}</p>
-        <p><span className="font-semibold text-slate-800">Study Style:</span> {profile.style || 'Not set'}</p>
+        <p><span className="font-semibold text-slate-800">Age:</span> {profile.age || 'Not set'}</p>
+        <p><span className="font-semibold text-slate-800">Institution:</span> {profile.institution || 'Not set'}</p>
       </div>
     </section>
   );

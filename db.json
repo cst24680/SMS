@@ -1,0 +1,24 @@
+{
+  "users": [
+    {
+      "fullName": "sera",
+      "email": "sera@gmail.com",
+      "password": "pass.1234",
+      "age": "21",
+      "institution": "SCMS",
+      "id": 1
+    }
+  ],
+  "goals": [
+    {
+      "title": "learn maths",
+      "subject": "programming",
+      "deadline": "2026-05-14",
+      "dailyHours": "5",
+      "studyMode": "Individual",
+      "priority": "Medium",
+      "userId": 1,
+      "id": 1
+    }
+  ]
+}

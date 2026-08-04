@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 function Signup({ onSignup, error, success }) {
-  const [formData, setFormData] = useState({ fullName: '', email: '', password: '', pace: '', style: '' });
+  const [formData, setFormData] = useState({ fullName: '', email: '', password: '', age: '', institution: '' });
   const [focusedField, setFocusedField] = useState('');
   const [inputMessage, setInputMessage] = useState('');
 
@@ -23,12 +23,12 @@ function Signup({ onSignup, error, success }) {
     setInputMessage('');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!formData.fullName || !formData.email || !formData.password) {
+    if (!formData.fullName || !formData.email || !formData.password || !formData.age || !formData.institution) {
       return;
     }
-    onSignup(formData);
+    await onSignup(formData);
   };
 
   return (
@@ -72,32 +72,28 @@ function Signup({ onSignup, error, success }) {
             className={`input-field ${focusedField === 'password' ? 'border-emerald-500 ring-1 ring-emerald-200' : ''}`}
             required
           />
-          <select
-            name="pace"
-            value={formData.pace}
+          <input
+            name="age"
+            type="number"
+            value={formData.age}
             onChange={handleChange}
-            onFocus={() => handleFocus('pace')}
+            onInput={handleInput}
+            onFocus={() => handleFocus('age')}
             onBlur={handleBlur}
-            className={`input-field ${focusedField === 'pace' ? 'border-emerald-500 ring-1 ring-emerald-200' : ''}`}
-          >
-            <option value="">Select pace</option>
-            <option value="Fast">Fast</option>
-            <option value="Moderate">Moderate</option>
-            <option value="Slow">Slow</option>
-          </select>
-          <select
-            name="style"
-            value={formData.style}
+            placeholder="Your age"
+            className={`input-field ${focusedField === 'age' ? 'border-emerald-500 ring-1 ring-emerald-200' : ''}`}
+          />
+          <input
+            name="institution"
+            type="text"
+            value={formData.institution}
             onChange={handleChange}
-            onFocus={() => handleFocus('style')}
+            onInput={handleInput}
+            onFocus={() => handleFocus('institution')}
             onBlur={handleBlur}
-            className={`input-field ${focusedField === 'style' ? 'border-emerald-500 ring-1 ring-emerald-200' : ''}`}
-          >
-            <option value="">Select style</option>
-            <option value="Silent">Silent co-working</option>
-            <option value="Discussion">Discussion-based</option>
-            <option value="Mixed">Mixed</option>
-          </select>
+            placeholder="School / college / working"
+            className={`input-field ${focusedField === 'institution' ? 'border-emerald-500 ring-1 ring-emerald-200' : ''}`}
+          />
           {inputMessage ? <p className="text-sm text-slate-500">{inputMessage}</p> : null}
           <button type="submit" className="btn btn-primary w-full" onMouseOver={() => setInputMessage('Submit your new account')} onFocus={() => setInputMessage('Submit your new account')}>Sign Up</button>
         </form>

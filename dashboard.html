@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudyBuddy | Workspace</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #f3f4f9; }
+    .nav-tab.active { background-color: #e0e7ff; color: #4338ca; font-weight: 600; }
+  </style>
+</head>
+<body class="p-4 md:p-8 flex justify-center items-center min-h-screen">
+
+  <!-- Main App Shell -->
+  <div class="w-full max-w-7xl bg-white rounded-3xl shadow-xl overflow-hidden flex flex-col md:flex-row h-[85vh]">
+    
+    <!-- LEFT SIDEBAR -->
+    <aside class="w-full md:w-64 bg-[#f8f8fe] border-r border-slate-100 p-6 flex flex-col justify-between shrink-0">
+      <div>
+        <div class="flex items-center gap-2 text-2xl font-bold text-indigo-600 mb-8 px-2">
+          <span>📚</span> StudyBuddy
+        </div>
+        
+        <nav class="space-y-2">
+          <button onclick="switchTab('dashboard')" id="tab-dashboard" class="nav-tab active w-full flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-100 font-medium rounded-2xl transition text-left text-sm">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>
+            Dashboard
+          </button>
+          
+          <button onclick="switchTab('sessionCards')" id="tab-sessionCards" class="nav-tab w-full flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-100 font-medium rounded-2xl transition text-left text-sm">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+            Session Cards
+          </button>
+          
+          <button onclick="switchTab('partners')" id="tab-partners" class="nav-tab w-full flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-100 font-medium rounded-2xl transition text-left text-sm">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+            Study Partners
+          </button>
+          
+          <button onclick="switchTab('goals')" id="tab-goals" class="nav-tab w-full flex items-center gap-3 px-4 py-3 text-slate-600 hover:bg-slate-100 font-medium rounded-2xl transition text-left text-sm">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+            Study Goals
+          </button>
+        </nav>
+      </div>
+
+      <div class="pt-6 border-t border-slate-200/60">
+        <button id="logoutBtn" class="w-full flex items-center gap-3 px-4 py-3 text-rose-500 hover:bg-rose-50 font-semibold rounded-2xl transition text-sm">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+          Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- RIGHT CONTENT WINDOW -->
+    <div class="flex-1 flex flex-col bg-[#f5f6fc] overflow-hidden">
+      
+      <!-- TOP NAVBAR -->
+      <header class="p-6 flex items-center justify-between gap-4 bg-[#f5f6fc] border-b border-slate-200/50">
+        <div class="relative flex-1 max-w-md">
+          <svg class="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+          <input id="searchInput" type="text" placeholder="Search tasks, sessions or goals..." class="w-full pl-11 pr-4 py-2.5 bg-white border border-slate-200/80 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm" />
+        </div>
+
+        <div class="flex items-center gap-4">
+          <button id="openModalBtn" class="bg-indigo-500 hover:bg-indigo-600 text-white px-5 py-2.5 rounded-2xl text-sm font-semibold shadow-md shadow-indigo-200 flex items-center gap-2 transition">
+            Create Task <span>+</span>
+          </button>
+          <div class="w-10 h-10 rounded-full border-2 border-white shadow-sm flex items-center justify-center bg-indigo-600 text-white font-bold" id="userAvatar">
+            U
+          </div>
+        </div>
+      </header>
+
+      <!-- PAGE VIEWS -->
+      <div class="p-6 flex-1 overflow-y-auto">
+        
+        <!-- PAGE 1: DASHBOARD OVERVIEW -->
+        <section id="page-dashboard" class="page-view">
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full">
+            <div class="lg:col-span-2 space-y-6">
+              <!-- Tasks -->
+              <div>
+                <h2 class="text-lg font-bold text-slate-800 mb-4">Urgent Tasks <span id="urgentCount" class="text-indigo-500 font-semibold text-sm">(0)</span></h2>
+                <div id="urgentTasksContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+              </div>
+
+              <!-- Productivity Stats -->
+              <div>
+                <h2 class="text-lg font-bold text-slate-800 mb-4">Productivity Stats</h2>
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                  <div class="md:col-span-2 bg-white rounded-3xl p-5 border border-slate-100 shadow-sm flex flex-col justify-between">
+                    <h3 class="font-bold text-slate-800 text-xs mb-3">Tasks Completed Today</h3>
+                    <div class="relative w-24 h-28 mx-auto flex items-center justify-center">
+                      <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                        <path class="text-slate-100" stroke-width="4" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                        <path id="progressCircle" class="text-indigo-500" stroke-dasharray="0, 100" stroke-width="4" stroke-linecap="round" stroke="currentColor" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                      </svg>
+                      <span id="progressPctText" class="absolute text-sm font-bold text-slate-800">0%</span>
+                    </div>
+                    <div class="mt-2 space-y-0.5 text-[11px] text-slate-500 font-medium text-center">
+                      <p id="completedTasksText" class="text-slate-700 font-semibold">0 of 0 completed</p>
+                      <p id="inProgressTasksText">0 in progress</p>
+                    </div>
+                  </div>
+
+                  <div class="md:col-span-3 bg-white rounded-3xl p-5 border border-slate-100 shadow-sm">
+                    <div class="flex items-center justify-between mb-2">
+                      <h3 class="font-bold text-slate-800 text-xs">Weekly Activity Rate</h3>
+                    </div>
+                    <div class="h-32 flex items-end justify-between gap-2 pt-4 px-2 border-b border-dashed border-slate-200 relative">
+                      <div id="chartBarContainer" class="flex-1 flex items-end justify-around pl-2 h-full"></div>
+                    </div>
+                    <div class="flex justify-between pl-4 pr-1 pt-2 text-[10px] text-slate-400 font-medium">
+                      <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Schedule Sidebar -->
+            <div class="bg-white rounded-3xl p-5 border border-slate-100 shadow-sm flex flex-col">
+              <h3 class="text-sm font-bold text-slate-800 mb-4 pb-2 border-b border-slate-100">📅 Today's Schedule</h3>
+              <div id="timelineContainer" class="space-y-4 text-xs text-slate-400 flex-1"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- PAGE 2: SESSION CARDS BUILDER -->
+        <section id="page-sessionCards" class="page-view hidden space-y-4">
+          <div>
+            <h2 class="text-xl font-bold text-slate-800">Session Card Builder</h2>
+            <p class="text-xs text-slate-500">Manage, edit, and publish your study session availability.</p>
+          </div>
+          <div id="studyBuddyApp"></div>
+        </section>
+
+        <!-- PAGE 3: STUDY PARTNERS -->
+        <section id="page-partners" class="page-view hidden space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-xl font-bold text-slate-800">Study Partners</h2>
+              <p class="text-xs text-slate-500">Discover and connect with students matching your study criteria.</p>
+            </div>
+            <button id="findMatchesBtn" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl text-xs font-semibold transition">
+              Refresh Matches
+            </button>
+          </div>
+          <div id="recommendedPartnersContainer" class="grid grid-cols-1 md:grid-cols-3 gap-4"></div>
+        </section>
+
+        <!-- PAGE 4: STUDY GOALS -->
+        <section id="page-goals" class="page-view hidden space-y-6">
+          <div>
+            <h2 class="text-xl font-bold text-slate-800">Track Goals</h2>
+            <p class="text-xs text-slate-500">Set study targets, monitor deadlines, and measure progress.</p>
+          </div>
+
+          <div class="grid gap-6 lg:grid-cols-[0.9fr_1.1fr] items-start">
+            <div class="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm space-y-4">
+              <h3 class="text-sm font-bold text-slate-900">Add New Goal</h3>
+              <form id="goalForm" class="space-y-3">
+                <input id="goalInput" type="text" placeholder="Goal (e.g., Learn React)" class="w-full rounded-xl border border-slate-200 p-2.5 text-xs focus:ring-2 focus:ring-indigo-500 outline-none" required />
+                <input id="deadlineInput" type="date" class="w-full rounded-xl border border-slate-200 p-2.5 text-xs focus:ring-2 focus:ring-indigo-500 outline-none" required />
+                <div class="flex items-center gap-3 pt-1">
+                  <input id="progressInput" type="range" min="0" max="100" value="0" class="flex-1 accent-indigo-600">
+                  <span id="progressPercent" class="w-10 text-xs font-bold text-indigo-600">0%</span>
+                </div>
+                <button type="submit" class="w-full rounded-xl bg-indigo-600 hover:bg-indigo-700 py-2.5 font-semibold text-white text-xs transition">Add Goal</button>
+              </form>
+            </div>
+
+            <div class="bg-white rounded-3xl p-6 border border-slate-100 shadow-sm">
+              <h3 class="text-sm font-bold text-slate-900 mb-4">Active Goals</h3>
+              <div id="goalsContainer" class="space-y-3"></div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- TASK MODAL -->
+  <div id="taskModal" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+    <div class="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-4">
+      <h3 class="text-lg font-bold text-slate-800">Create New Task</h3>
+      <form id="createTaskForm" class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Title</label>
+          <input type="text" id="taskTitle" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm outline-none focus:ring-2 focus:ring-indigo-500" required placeholder="e.g. Prepare for exam" />
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Category</label>
+          <select id="taskTag" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm outline-none">
+            <option value="Studying">Studying</option>
+            <option value="Exam">Exam</option>
+            <option value="Project">Project</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Priority</label>
+          <select id="taskPriority" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm outline-none">
+            <option value="High">High</option>
+            <option value="Mid">Mid</option>
+            <option value="Low">Low</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs font-semibold text-slate-600 mb-1">Due Date</label>
+          <input type="date" id="taskDueDate" class="w-full px-3 py-2 border border-slate-200 rounded-xl text-sm outline-none" required />
+        </div>
+        <div class="flex gap-2 pt-2">
+          <button type="submit" class="flex-1 bg-indigo-600 text-white py-2.5 rounded-xl font-semibold text-sm hover:bg-indigo-700">Save Task</button>
+          <button type="button" id="closeModalBtn" class="px-4 bg-slate-100 text-slate-600 py-2.5 rounded-xl font-semibold text-sm hover:bg-slate-200">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- React Dependencies -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Navigation Tab Switcher Script -->
+  <script>
+    function switchTab(tabName) {
+      document.querySelectorAll('.page-view').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+
+      document.getElementById(`page-${tabName}`).classList.remove('hidden');
+      document.getElementById(`tab-${tabName}`).classList.add('active');
+    }
+  </script>
+
+  <!-- React Session Card Builder Script -->
+  <script type="text/babel">
+    function SessionCardItem({ entry, onEdit, onDelete }) {
+      const isAvailable = entry.status === 'Available';
+      return (
+        <div className={`p-4 rounded-2xl border ${isAvailable ? 'border-emerald-200 bg-emerald-50/30' : 'border-slate-200 bg-slate-50'} shadow-sm space-y-2`}>
+          <div className="flex justify-between items-center">
+            <h3 className="font-bold text-xs text-slate-900">{entry.name}'s Session ({entry.sessionId})</h3>
+            <span className={`px-2 py-0.5 text-[10px] font-semibold rounded-full ${isAvailable ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-200 text-slate-700'}`}>
+              {entry.status}
+            </span>
+          </div>
+          <p className="text-xs text-slate-600"><strong>Subject:</strong> {entry.category}</p>
+          <p className="text-xs text-slate-500">{entry.description}</p>
+          <div className="flex gap-2 pt-1">
+            <button type="button" className="flex-1 py-1 bg-indigo-600 text-white font-semibold rounded-lg text-xs" onClick={onEdit}>Edit</button>
+            <button type="button" className="flex-1 py-1 bg-rose-600 text-white font-semibold rounded-lg text-xs" onClick={onDelete}>Delete</button>
+          </div>
+        </div>
+      );
+    }
+
+    function SessionCardApp() {
+      const [cards, setCards] = React.useState(() => JSON.parse(localStorage.getItem('studyBuddySessionCards')) || []);
+      const [name, setName] = React.useState('');
+      const [sessionId, setSessionId] = React.useState('');
+      const [category, setCategory] = React.useState('Programming');
+      const [status, setStatus] = React.useState('Available');
+      const [description, setDescription] = React.useState('');
+      const [editId, setEditId] = React.useState(null);
+
+      React.useEffect(() => {
+        localStorage.setItem('studyBuddySessionCards', JSON.stringify(cards));
+      }, [cards]);
+
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!name.trim() || !sessionId.trim()) return;
+
+        if (editId) {
+          setCards(cards.map(c => c.id === editId ? { id: editId, name, sessionId, category, status, description } : c));
+          setEditId(null);
+        } else {
+          setCards([...cards, { id: Date.now(), name, sessionId, category, status, description }]);
+        }
+        handleReset();
+      };
+
+      const handleStartEdit = (card) => {
+        setEditId(card.id);
+        setName(card.name);
+        setSessionId(card.sessionId);
+        setCategory(card.category);
+        setStatus(card.status);
+        setDescription(card.description);
+      };
+
+      const handleReset = () => {
+        setName(''); setSessionId(''); setCategory('Programming'); setStatus('Available'); setDescription(''); setEditId(null);
+      };
+
+      return (
+        <div className="grid gap-6 lg:grid-cols-2 items-start">
+          <form onSubmit={handleSubmit} className="p-5 rounded-3xl border border-slate-100 bg-white space-y-3 shadow-sm">
+            <h3 className="text-xs font-bold text-slate-800 uppercase">{editId ? 'Edit Card' : 'New Session Card'}</h3>
+            <input className="w-full p-2.5 border rounded-xl text-xs outline-none" value={name} onChange={e => setName(e.target.value)} placeholder="Student Name" required />
+            <input className="w-full p-2.5 border rounded-xl text-xs outline-none" value={sessionId} onChange={e => setSessionId(e.target.value)} placeholder="Session Code (e.g. SB-101)" required />
+            <select className="w-full p-2.5 border rounded-xl text-xs outline-none" value={category} onChange={e => setCategory(e.target.value)}>
+              <option value="Programming">Programming</option>
+              <option value="Mathematics">Mathematics</option>
+              <option value="Science">Science</option>
+            </select>
+            <div className="flex gap-4 text-xs">
+              <label><input type="radio" name="st" value="Available" checked={status === 'Available'} onChange={e => setStatus(e.target.value)} /> Available</label>
+              <label><input type="radio" name="st" value="Not Available" checked={status === 'Not Available'} onChange={e => setStatus(e.target.value)} /> Unavailable</label>
+            </div>
+            <textarea className="w-full p-2.5 border rounded-xl text-xs outline-none" rows="2" value={description} onChange={e => setDescription(e.target.value)} placeholder="Study topic focus..." required />
+            <div className="flex gap-2">
+              <button type="submit" className="flex-1 py-2 bg-indigo-600 text-white font-semibold rounded-xl text-xs">{editId ? 'Save' : 'Create Card'}</button>
+              <button type="button" onClick={handleReset} className="px-3 py-2 bg-slate-100 text-slate-600 rounded-xl text-xs">Clear</button>
+            </div>
+          </form>
+
+          <div className="space-y-3">
+            {cards.length === 0 ? (
+              <div className="p-8 text-center border-2 border-dashed rounded-3xl text-slate-400 bg-white text-xs">No session cards added.</div>
+            ) : (
+              cards.map(c => <SessionCardItem key={c.id} entry={c} onEdit={() => handleStartEdit(c)} onDelete={() => setCards(cards.filter(x => x.id !== c.id))} />)
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('studyBuddyApp')).render(<SessionCardApp />);
+  </script>
+
+  <!-- Goals Script -->
+  <script>
+    (function () {
+      let goals = JSON.parse(localStorage.getItem('studyGoals')) || [
+        { id: 1, goal: 'Learn React.js', deadline: '2026-06-25', progress: 50 }
+      ];
+
+      window.renderGoals = function () {
+        const container = document.getElementById('goalsContainer');
+        if (!container) return;
+
+        container.innerHTML = goals.map(g => `
+          <div class="rounded-2xl border p-3.5 bg-indigo-50/40 border-indigo-100 space-y-2">
+            <div class="flex justify-between items-center">
+              <h4 class="font-bold text-slate-800 text-xs">${g.goal}</h4>
+              <div class="flex gap-1">
+                <button onclick="window.editGoal(${g.id})" class="px-2 py-0.5 text-[10px] font-bold bg-indigo-100 text-indigo-700 rounded">Edit</button>
+                <button onclick="window.deleteGoal(${g.id})" class="px-2 py-0.5 text-[10px] font-bold bg-rose-100 text-rose-700 rounded">Delete</button>
+              </div>
+            </div>
+            <div class="flex justify-between text-[10px] text-slate-500">
+              <span>Deadline: ${g.deadline}</span>
+              <span class="font-bold text-indigo-600">${g.progress}%</span>
+            </div>
+            <div class="h-1.5 w-full bg-slate-200 rounded-full">
+              <div class="h-1.5 bg-indigo-500 rounded-full" style="width: ${g.progress}%"></div>
+            </div>
+          </div>
+        `).join('');
+      };
+
+      window.editGoal = function(id) {
+        const goal = goals.find(g => g.id === id);
+        if (!goal) return;
+        const p = prompt('Update progress %:', goal.progress);
+        if (p !== null) { goal.progress = parseInt(p) || 0; localStorage.setItem('studyGoals', JSON.stringify(goals)); window.renderGoals(); }
+      };
+
+      window.deleteGoal = function(id) {
+        goals = goals.filter(g => g.id !== id);
+        localStorage.setItem('studyGoals', JSON.stringify(goals));
+        window.renderGoals();
+      };
+
+      document.addEventListener('DOMContentLoaded', () => {
+        const goalForm = document.getElementById('goalForm');
+        const progressInput = document.getElementById('progressInput');
+        const progressPercent = document.getElementById('progressPercent');
+
+        if (progressInput) progressInput.addEventListener('input', (e) => progressPercent.textContent = e.target.value + '%');
+
+        if (goalForm) {
+          goalForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+            const goal = document.getElementById('goalInput').value.trim();
+            const deadline = document.getElementById('deadlineInput').value;
+            const progress = parseInt(progressInput.value) || 0;
+
+            if (goal && deadline) {
+              goals.push({ id: Date.now(), goal, deadline, progress });
+              localStorage.setItem('studyGoals', JSON.stringify(goals));
+              window.renderGoals();
+              this.reset();
+              progressPercent.textContent = '0%';
+            }
+          });
+        }
+        window.renderGoals();
+      });
+    })();
+  </script>
+
+  <!-- Core Dashboard Script -->
+  <script>
+    let tasks = [
+      { id: 1, title: 'Learn words from text', category: 'Project/study', tags: ['Studying'], priority: 'High', dueDate: 'Sep 12', completedSubtasks: 8, totalSubtasks: 12, completed: false }
+    ];
+
+    let schedule = [
+      { time: '08:00', title: 'Training', checked: true },
+      { time: '12:00', title: 'English lesson', checked: false }
+    ];
+
+    function initDashboard() {
+      renderTasks(tasks);
+      renderProductivity();
+      renderTimeline();
+      loadRecommendedPartners();
+    }
+
+    async function loadRecommendedPartners() {
+      const container = document.getElementById('recommendedPartnersContainer');
+      container.innerHTML = `
+        <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-sm flex flex-col justify-between space-y-3">
+          <div class="flex items-center justify-between">
+            <div>
+              <h4 class="font-bold text-slate-800 text-xs">Ava • Mathematics</h4>
+              <p class="text-[10px] text-slate-400">Exam Prep • Online</p>
+            </div>
+            <span class="px-2.5 py-1 bg-emerald-100 text-emerald-700 font-bold rounded-lg text-[10px]">92% Match</span>
+          </div>
+          <button onclick="alert('Partner request sent!')" class="w-full py-1.5 bg-indigo-50 text-indigo-600 font-semibold rounded-xl text-xs">Connect Request</button>
+        </div>
+      `;
+    }
+
+    function renderTasks(taskList) {
+      const container = document.getElementById('urgentTasksContainer');
+      document.getElementById('urgentCount').textContent = `(${taskList.length})`;
+      container.innerHTML = taskList.map(task => `
+        <div class="bg-white rounded-3xl p-5 border border-slate-100 shadow-sm space-y-3">
+          <div class="flex justify-between text-xs text-slate-400">
+            <span>📂 ${task.category}</span>
+            <button onclick="toggleTaskComplete(${task.id})" class="text-xs px-2 py-0.5 bg-slate-100 rounded">${task.completed ? 'Done' : 'Mark Done'}</button>
+          </div>
+          <h3 class="font-bold text-slate-800 text-xs ${task.completed ? 'line-through text-slate-400' : ''}">${task.title}</h3>
+          <div class="w-full bg-slate-100 rounded-full h-1.5"><div class="bg-indigo-500 h-1.5 rounded-full" style="width:${Math.round((task.completedSubtasks/task.totalSubtasks)*100)}%"></div></div>
+        </div>
+      `).join('');
+    }
+
+    function renderProductivity() {
+      const chartContainer = document.getElementById('chartBarContainer');
+      chartContainer.innerHTML = [40, 60, 75, 50, 60, 45, 80].map(h => `<div class="w-3 bg-indigo-300 rounded-t-sm" style="height:${h}%"></div>`).join('');
+    }
+
+    function renderTimeline() {
+      document.getElementById('timelineContainer').innerHTML = schedule.map((slot, i) => `
+        <div class="flex gap-3 items-center">
+          <span class="w-8 font-semibold text-slate-400">${slot.time}</span>
+          <div class="flex-1 bg-indigo-50 border-l-4 border-indigo-500 rounded-r-xl p-2 flex items-center gap-2 text-indigo-900 font-medium">
+            <input type="checkbox" ${slot.checked ? 'checked' : ''} onchange="schedule[${i}].checked = !schedule[${i}].checked; renderTimeline();" />
+            <span class="${slot.checked ? 'line-through text-slate-400' : ''}">${slot.title}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    window.toggleTaskComplete = function(id) {
+      const t = tasks.find(x => x.id === id);
+      if (t) { t.completed = !t.completed; renderTasks(tasks); }
+    };
+
+    document.getElementById('openModalBtn').addEventListener('click', () => document.getElementById('taskModal').classList.remove('hidden'));
+    document.getElementById('closeModalBtn').addEventListener('click', () => document.getElementById('taskModal').classList.add('hidden'));
+
+    document.getElementById('createTaskForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      tasks.push({
+        id: Date.now(),
+        title: document.getElementById('taskTitle').value,
+        category: 'Project/study',
+        tags: [document.getElementById('taskTag').value],
+        priority: document.getElementById('taskPriority').value,
+        dueDate: document.getElementById('taskDueDate').value,
+        completedSubtasks: 0,
+        totalSubtasks: 10,
+        completed: false
+      });
+      document.getElementById('taskModal').classList.add('hidden');
+      e.target.reset();
+      renderTasks(tasks);
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('currentUser');
+      window.location.href = 'index.html';
+    });
+
+    document.addEventListener('DOMContentLoaded', initDashboard);
+  </script>
+</body>
+</html>

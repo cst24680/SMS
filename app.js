@@ -85,10 +85,10 @@ window.addEventListener('DOMContentLoaded', () => {
       const result = await response.json();
 
       if (result.success) {
-        showMessage('Login successful! Redirecting...', true);
+        showMessage('Login successful! Redirecting to dashboard...', true);
         localStorage.setItem('currentUser', JSON.stringify({ username }));
         setTimeout(() => {
-          window.location.href = 'index.html';
+          window.location.href = 'dashboard.html';
         }, 800);
         return;
       }
@@ -101,9 +101,9 @@ window.addEventListener('DOMContentLoaded', () => {
       // If the user is not registered locally, show a clear "not registered" message
       // instead of a generic server-unavailable message.
       if (handleLocalStorageLogin(username, password)) {
-        showMessage('Local login successful! Redirecting...', true);
+        showMessage('Local login successful! Redirecting to dashboard...', true);
         setTimeout(() => {
-          window.location.href = 'index.html';
+          window.location.href = 'dashboard.html';
         }, 800);
         return;
       }
