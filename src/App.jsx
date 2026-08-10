@@ -15,11 +15,22 @@ async function request(path, options = {}) {
     ...options,
   });
 
+  const contentType = response.headers.get('content-type') || '';
+  const isJson = contentType.includes('application/json');
+
   if (!response.ok) {
-    throw new Error('Unable to connect to the StudyBuddy data server. Start it with npm run api.');
+    let errorMessage = 'Unable to connect to the StudyBuddy data server.';
+    if (isJson) {
+      const errorData = await response.json();
+      errorMessage = errorData.message || errorMessage;
+    } else {
+      errorMessage = `Server returned an invalid response (${response.status}).`;
+    }
+    throw new Error(errorMessage);
   }
 
-  return response.status === 204 ? null : response.json();
+  if (response.status === 204) return null;
+  return isJson ? response.json() : null;
 }
 
 function App() {
@@ -41,11 +52,16 @@ function App() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [storedUsers, storedGoals, storedRequests, storedCalendarEvents] = await Promise.all([request('/users'), request('/goals'), request('/partnerRequests'), request('/calendarEvents')]);
-        setUsers(storedUsers);
-        setGoals(storedGoals);
-        setPartnerRequests(storedRequests);
-        setCalendarEvents(storedCalendarEvents);
+        const [storedUsers, storedGoals, storedRequests, storedCalendarEvents] = await Promise.all([
+          request('/users').catch(() => []),
+          request('/goals').catch(() => []),
+          request('/partnerRequests').catch(() => []),
+          request('/calendarEvents').catch(() => []),
+        ]);
+        setUsers(storedUsers || []);
+        setGoals(storedGoals || []);
+        setPartnerRequests(storedRequests || []);
+        setCalendarEvents(storedCalendarEvents || []);
         setDataError('');
       } catch (error) {
         setDataError(error.message);
@@ -66,10 +82,6 @@ function App() {
 
   const handleSignup = async ({ fullName, email, password, age, institution, subjects, location, studyMode }) => {
     const normalizedEmail = email.trim().toLowerCase();
-    if (users.some((user) => user.email.toLowerCase() === normalizedEmail)) {
-      setAuthError('An account with this email already exists.');
-      return false;
-    }
 
     try {
       const newUser = await request('/users', {
@@ -90,22 +102,32 @@ function App() {
   };
 
   const handleLogin = async ({ email, password }) => {
-    const normalizedEmail = email.trim().toLowerCase();
+    const loginIdentifier = email.trim();
     try {
-      const matchingUsers = await request(`/users?email=${encodeURIComponent(normalizedEmail)}`);
-      const foundUser = matchingUsers.find((user) => user.password === password);
-      if (!foundUser) {
-        setAuthError('Invalid email or password.');
-        return false;
-      }
+      const result = await request('/login', {
+        method: 'POST',
+        body: JSON.stringify({ username: loginIdentifier, email: loginIdentifier, password }),
+      });
 
-      setUsers((previous) => previous.some((user) => user.id === foundUser.id) ? previous : [...previous, foundUser]);
-      setCurrentUser({ id: foundUser.id, fullName: foundUser.fullName, email: foundUser.email });
-      setProfile({ fullName: foundUser.fullName, email: foundUser.email, age: foundUser.age || '', institution: foundUser.institution || '', subjects: foundUser.subjects || '', location: foundUser.location || '', studyMode: foundUser.studyMode || '' });
-      setAuthError('');
-      setSuccessMessage('Welcome back! Your study partners are ready.');
-      setView('dashboard');
-      return true;
+      if (result && result.success) {
+        const loggedUser = result.user;
+        setCurrentUser({ id: loggedUser.id || 1, fullName: loggedUser.name, email: loggedUser.email });
+        setProfile({
+          fullName: loggedUser.name,
+          email: loggedUser.email,
+          age: loggedUser.age || '',
+          institution: loggedUser.institution || '',
+          subjects: loggedUser.subjects || '',
+          location: loggedUser.location || '',
+          studyMode: loggedUser.studyMode || ''
+        });
+        setAuthError('');
+        setSuccessMessage('Welcome back! Your study space is ready.');
+        setView('dashboard');
+        return true;
+      }
+      setAuthError('Invalid email or password.');
+      return false;
     } catch (error) {
       setAuthError(error.message);
       return false;
@@ -162,7 +184,7 @@ function App() {
 
   const addGoal = async (goal) => {
     try {
-      const newGoal = await request('/goals', { method: 'POST', body: JSON.stringify({ ...goal, userId: currentUser.id }) });
+      const newGoal = await request('/goals', { method: 'POST', body: JSON.stringify({ ...goal, userId: currentUser?.id || 1 }) });
       setGoals((previous) => [newGoal, ...previous]);
       setSuccessMessage('Goal added successfully.');
       return true;
@@ -174,7 +196,7 @@ function App() {
 
   const updateGoal = async (goalId, updatedGoal) => {
     try {
-      const savedGoal = await request(`/goals/${goalId}`, { method: 'PUT', body: JSON.stringify({ ...updatedGoal, userId: currentUser.id }) });
+      const savedGoal = await request(`/goals/${goalId}`, { method: 'PUT', body: JSON.stringify({ ...updatedGoal, userId: currentUser?.id || 1 }) });
       setGoals((previous) => previous.map((goal) => (goal.id === goalId ? savedGoal : goal)));
       setSuccessMessage('Goal updated successfully.');
       return true;
@@ -196,7 +218,7 @@ function App() {
 
   const addCalendarEvent = async (event) => {
     try {
-      const savedEvent = await request('/calendarEvents', { method: 'POST', body: JSON.stringify({ ...event, userId: currentUser.id }) });
+      const savedEvent = await request('/calendarEvents', { method: 'POST', body: JSON.stringify({ ...event, userId: currentUser?.id || 1 }) });
       setCalendarEvents((previous) => [...previous, savedEvent]);
       setSuccessMessage('Study task added to your calendar.');
       return true;
@@ -213,7 +235,25 @@ function App() {
         {view === 'home' && <Home setView={setView} />}
         {view === 'login' && <Login onLogin={handleLogin} error={authError} success={successMessage} />}
         {view === 'signup' && <Signup onSignup={handleSignup} error={authError} success={successMessage} />}
-        {view === 'dashboard' && currentUser && <Dashboard currentUser={currentUser} profile={profile} users={users} goals={goals} partnerRequests={partnerRequests} calendarEvents={calendarEvents} addGoal={addGoal} updateGoal={updateGoal} deleteGoal={deleteGoal} addCalendarEvent={addCalendarEvent} sendPartnerRequest={sendPartnerRequest} respondToPartnerRequest={respondToPartnerRequest} onRequest={request} success={successMessage} dataError={dataError} />}
+        {view === 'dashboard' && currentUser && (
+          <Dashboard
+            currentUser={currentUser}
+            profile={profile}
+            users={users}
+            goals={goals}
+            partnerRequests={partnerRequests}
+            calendarEvents={calendarEvents}
+            addGoal={addGoal}
+            updateGoal={updateGoal}
+            deleteGoal={deleteGoal}
+            addCalendarEvent={addCalendarEvent}
+            sendPartnerRequest={sendPartnerRequest}
+            respondToPartnerRequest={respondToPartnerRequest}
+            onRequest={request}
+            success={successMessage}
+            dataError={dataError}
+          />
+        )}
       </main>
       <Footer />
     </div>
