@@ -1,6 +1,4 @@
 // app.js - Client-side login logic for StudyBuddy
-// This script attaches to the login form, sends credentials to the Express backend,
-// and updates the UI with a success or error message without refreshing the page.
 
 window.addEventListener('DOMContentLoaded', () => {
   const loginForm = document.getElementById('loginForm');
@@ -47,12 +45,12 @@ window.addEventListener('DOMContentLoaded', () => {
 
     localStorage.setItem(
       'currentUser',
-      JSON.stringify({ name: matchedUser.name, email: matchedUser.email })
+      JSON.stringify({ name: matchedUser.name || matchedUser.fullName, email: matchedUser.email })
     );
     localStorage.setItem(
       'userProfile',
       JSON.stringify({
-        name: matchedUser.name,
+        name: matchedUser.name || matchedUser.fullName,
         email: matchedUser.email,
         pace: matchedUser.pace || '',
         style: matchedUser.style || '',
@@ -74,7 +72,7 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 
     try {
-      const response = await fetch('/login', {
+      const response = await fetch('/api/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -82,11 +80,19 @@ window.addEventListener('DOMContentLoaded', () => {
         body: JSON.stringify({ username, password }),
       });
 
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        throw new Error('Non-JSON response returned from server');
+      }
+
       const result = await response.json();
 
       if (result.success) {
         showMessage('Login successful! Redirecting to dashboard...', true);
-        localStorage.setItem('currentUser', JSON.stringify({ username }));
+        localStorage.setItem(
+          'currentUser',
+          JSON.stringify(result.user || { username })
+        );
         setTimeout(() => {
           window.location.href = 'dashboard.html';
         }, 800);
@@ -95,11 +101,8 @@ window.addEventListener('DOMContentLoaded', () => {
 
       showMessage(result.message || 'Invalid username or password.', false);
     } catch (error) {
-      console.error('Login request failed:', error);
+      console.warn('Backend login check failed, falling back to localStorage...', error);
 
-      // If the server is unavailable, try a localStorage-based login first.
-      // If the user is not registered locally, show a clear "not registered" message
-      // instead of a generic server-unavailable message.
       if (handleLocalStorageLogin(username, password)) {
         showMessage('Local login successful! Redirecting to dashboard...', true);
         setTimeout(() => {
@@ -108,8 +111,7 @@ window.addEventListener('DOMContentLoaded', () => {
         return;
       }
 
-      // No local account found — tell the user they're not registered locally.
-      showMessage('No matching account found locally. Please sign up or try again later.', false);
+      showMessage('Invalid email or password. Please try again or create an account.', false);
     }
   });
 });

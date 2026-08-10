@@ -1,85 +1,236 @@
 import express from 'express';
+import fs from 'fs/promises';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
 const app = express();
 const PORT = process.env.PORT || 3000;
+const dataDirectory = path.join(__dirname, 'data');
+const appDataFile = path.join(__dirname, 'db.json');
+const recordStateFile = path.join(dataDirectory, 'record-state.json');
 
 app.use(express.json());
-app.use(express.static(path.join(__dirname, '.')));
 
-app.post('/login', (req, res) => {
-  const { username, password } = req.body;
-
-  // Hardcoded demo credentials for StudyBuddy login.
-  const validUsername = 'admin';
-  const validPassword = '12345';
-
-  if (username === validUsername && password === validPassword) {
-    return res.json({ success: true });
+async function ensureDataFile() {
+  await fs.mkdir(dataDirectory, { recursive: true });
+  try {
+    await fs.access(appDataFile);
+  } catch {
+    const seed = JSON.parse(await fs.readFile(path.join(__dirname, 'db.json'), 'utf8'));
+    await fs.writeFile(appDataFile, JSON.stringify(seed, null, 2), 'utf8');
   }
+}
 
-  return res.json({ success: false, message: 'Invalid username or password' });
-});
+async function readAppData() {
+  await ensureDataFile();
+  return JSON.parse(await fs.readFile(appDataFile, 'utf8'));
+}
 
-// --- Additive API endpoints for MCA/BCA features ---
+async function writeAppData(data) {
+  await fs.writeFile(appDataFile, JSON.stringify(data, null, 2), 'utf8');
+}
 
-// In-memory demo stores (replace with real DB later)
-const users = [
-  { id: 'u-admin', name: 'Admin', email: 'admin', subjects: ['Mathematics','Programming'], studyMode: 'Individual', timeSlots: [{day:'Mon',start:'18:00',end:'20:00'}], location: {city:'DemoCity'}, course: 'BCA' }
-];
-const partnerRequests = [];
-const studySessions = [];
-const feedbacks = [];
+function newId(items) {
+  return Math.max(0, ...items.map((item) => Number(item.id) || 0)) + 1;
+}
 
-app.get('/api/recommendations', (req, res) => {
-  // Simple demo: return all users with a random match score
-  const { userId } = req.query;
-  // In real usage the server would compute using the same calculateMatchScore logic
-  const data = users.filter(u => u.id !== userId).map(u => ({ user: u, score: Math.floor(60 + Math.random()*40) }));
-  res.json({ success: true, recommendations: data });
-});
+// -------------------------------------------------------------
+// Authentication Endpoint
+// -------------------------------------------------------------
+app.post('/api/login', async (req, res, next) => {
+  try {
+    const { username, password } = req.body;
+    if (!username || !password) {
+      return res.status(400).json({ success: false, message: 'Username and password are required.' });
+    }
 
-app.get('/api/subjects', (req, res) => {
-  const subjectSet = new Set();
-  // gather from users
-  for (const u of users) {
-    if (Array.isArray(u.subjects)) u.subjects.forEach(s => subjectSet.add(s));
+    const data = await readAppData();
+    const users = data.users || [];
+    const matchedUser = users.find(
+      (user) => user.email.toLowerCase() === username.toLowerCase() && user.password === password
+    );
+
+    if (matchedUser) {
+      return res.json({
+        success: true,
+        message: 'Login successful',
+        user: { name: matchedUser.fullName || matchedUser.name, email: matchedUser.email },
+      });
+    }
+
+    return res.status(401).json({ success: false, message: 'Invalid email or password.' });
+  } catch (error) {
+    next(error);
   }
-  // gather from sessions
-  for (const s of studySessions) {
-    if (s.subject) subjectSet.add(s.subject);
+});
+
+// -------------------------------------------------------------
+// Generic Collection Routes
+// -------------------------------------------------------------
+for (const collection of ['users', 'goals', 'partnerRequests', 'calendarEvents']) {
+  app.get(`/api/${collection}`, async (req, res, next) => {
+    try {
+      const data = await readAppData();
+      const query = Object.entries(req.query);
+      res.json(
+        (data[collection] || []).filter((record) =>
+          query.every(([key, value]) => String(record[key]) === value)
+        )
+      );
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.post(`/api/${collection}`, async (req, res, next) => {
+    try {
+      const data = await readAppData();
+      const records = data[collection] || [];
+      const record = { ...req.body, id: newId(records) };
+      data[collection] = [...records, record];
+      await writeAppData(data);
+      res.status(201).json(record);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.put(`/api/${collection}/:id`, async (req, res, next) => {
+    try {
+      const data = await readAppData();
+      const records = data[collection] || [];
+      const index = records.findIndex((record) => String(record.id) === req.params.id);
+      if (index < 0) return res.status(404).json({ message: 'Record not found.' });
+      const record = { ...req.body, id: records[index].id };
+      records[index] = record;
+      data[collection] = records;
+      await writeAppData(data);
+      res.json(record);
+    } catch (error) {
+      next(error);
+    }
+  });
+
+  app.delete(`/api/${collection}/:id`, async (req, res, next) => {
+    try {
+      const data = await readAppData();
+      const records = data[collection] || [];
+      const remaining = records.filter((record) => String(record.id) !== req.params.id);
+      if (remaining.length === records.length)
+        return res.status(404).json({ message: 'Record not found.' });
+      data[collection] = remaining;
+      await writeAppData(data);
+      res.status(204).end();
+    } catch (error) {
+      next(error);
+    }
+  });
+}
+
+function validRecordName(name) {
+  return /^[a-z0-9_-]+\.txt$/i.test(name || '');
+}
+
+async function getRecordName() {
+  try {
+    return JSON.parse(await fs.readFile(recordStateFile, 'utf8')).fileName;
+  } catch {
+    return 'study-record.txt';
   }
-  const subjects = Array.from(subjectSet);
-  res.json({ success: true, subjects });
+}
+
+async function saveRecordName(fileName) {
+  await fs.mkdir(dataDirectory, { recursive: true });
+  await fs.writeFile(recordStateFile, JSON.stringify({ fileName }), 'utf8');
+}
+
+// -------------------------------------------------------------
+// Exercise 7: Node.js File System (FS) Endpoints
+// -------------------------------------------------------------
+app.get('/api/study-record', async (req, res, next) => {
+  try {
+    const fileName = await getRecordName();
+    res.json({
+      fileName,
+      content: await fs.readFile(path.join(dataDirectory, fileName), 'utf8'),
+    });
+  } catch (error) {
+    if (error.code === 'ENOENT')
+      return res.status(404).json({ message: 'No study record file exists yet.' });
+    next(error);
+  }
 });
 
-app.post('/api/partner-request', (req, res) => {
-  const { fromUserId, toUserId, message } = req.body;
-  const reqObj = { id: `pr_${Date.now()}`, fromUserId, toUserId, message, status: 'pending', created_at: new Date().toISOString() };
-  partnerRequests.push(reqObj);
-  res.json({ success: true, request: reqObj });
+app.post('/api/study-record', async (req, res, next) => {
+  try {
+    const { content } = req.body;
+    if (!String(content || '').trim())
+      return res.status(400).json({ message: 'Study record content is required.' });
+    await fs.mkdir(dataDirectory, { recursive: true });
+    const fileName = await getRecordName();
+    await fs.writeFile(path.join(dataDirectory, fileName), content.trim(), 'utf8');
+    await saveRecordName(fileName);
+    res.status(201).json({ fileName, content: content.trim() });
+  } catch (error) {
+    next(error);
+  }
 });
 
-app.get('/api/sessions', (req, res) => {
-  res.json({ success: true, sessions: studySessions });
+app.patch('/api/study-record', async (req, res, next) => {
+  try {
+    const { content } = req.body;
+    if (!String(content || '').trim())
+      return res.status(400).json({ message: 'Text to append is required.' });
+    const fileName = await getRecordName();
+    await fs.appendFile(path.join(dataDirectory, fileName), `\n${content.trim()}`, 'utf8');
+    res.json({
+      fileName,
+      content: await fs.readFile(path.join(dataDirectory, fileName), 'utf8'),
+    });
+  } catch (error) {
+    if (error.code === 'ENOENT')
+      return res.status(404).json({ message: 'Create the study record before appending.' });
+    next(error);
+  }
 });
 
-app.post('/api/sessions', (req, res) => {
-  const session = { id: `s_${Date.now()}`, ...req.body, created_at: new Date().toISOString() };
-  studySessions.push(session);
-  res.json({ success: true, session });
+app.patch('/api/study-record/rename', async (req, res, next) => {
+  try {
+    const { fileName } = req.body;
+    if (!validRecordName(fileName))
+      return res.status(400).json({ message: 'Use a simple .txt filename (letters, numbers, _ or -).' });
+    const currentName = await getRecordName();
+    await fs.rename(path.join(dataDirectory, currentName), path.join(dataDirectory, fileName));
+    await saveRecordName(fileName);
+    res.json({ fileName });
+  } catch (error) {
+    if (error.code === 'ENOENT')
+      return res.status(404).json({ message: 'Create the study record before renaming.' });
+    next(error);
+  }
 });
 
-app.post('/api/feedback', (req, res) => {
-  const fb = { id: `f_${Date.now()}`, ...req.body, created_at: new Date().toISOString() };
-  feedbacks.push(fb);
-  res.json({ success: true, feedback: fb });
+app.delete('/api/study-record', async (req, res, next) => {
+  try {
+    const fileName = await getRecordName();
+    await fs.unlink(path.join(dataDirectory, fileName));
+    await fs.unlink(recordStateFile).catch(() => {});
+    res.status(204).end();
+  } catch (error) {
+    if (error.code === 'ENOENT')
+      return res.status(404).json({ message: 'No study record file exists to delete.' });
+    next(error);
+  }
 });
 
-app.listen(PORT, () => {
-  console.log(`StudyBuddy server running on http://localhost:${PORT}`);
+app.use((error, req, res, next) => {
+  console.error(error);
+  res.status(500).json({ message: 'The StudyBuddy file operation could not be completed.' });
 });
+
+app.use(express.static(path.join(__dirname, 'dist')));
+app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'dist', 'index.html')));
+
+app.listen(PORT, () => console.log(`StudyBuddy server running on http://localhost:${PORT}`));

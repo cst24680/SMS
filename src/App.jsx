@@ -213,7 +213,7 @@ function App() {
         {view === 'home' && <Home setView={setView} />}
         {view === 'login' && <Login onLogin={handleLogin} error={authError} success={successMessage} />}
         {view === 'signup' && <Signup onSignup={handleSignup} error={authError} success={successMessage} />}
-        {view === 'dashboard' && currentUser && <Dashboard currentUser={currentUser} profile={profile} users={users} goals={goals} partnerRequests={partnerRequests} calendarEvents={calendarEvents} addGoal={addGoal} updateGoal={updateGoal} deleteGoal={deleteGoal} addCalendarEvent={addCalendarEvent} sendPartnerRequest={sendPartnerRequest} respondToPartnerRequest={respondToPartnerRequest} success={successMessage} dataError={dataError} />}
+        {view === 'dashboard' && currentUser && <Dashboard currentUser={currentUser} profile={profile} users={users} goals={goals} partnerRequests={partnerRequests} calendarEvents={calendarEvents} addGoal={addGoal} updateGoal={updateGoal} deleteGoal={deleteGoal} addCalendarEvent={addCalendarEvent} sendPartnerRequest={sendPartnerRequest} respondToPartnerRequest={respondToPartnerRequest} onRequest={request} success={successMessage} dataError={dataError} />}
       </main>
       <Footer />
     </div>

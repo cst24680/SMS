@@ -4,9 +4,9 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "concurrently \"npm run api\" \"vite\"",
+    "dev": "concurrently \"npm run api\" \"npm run client\"",
     "client": "vite",
-    "api": "json-server --watch db.json --port 3001",
+    "api": "node server.js",
     "build": "vite build",
     "preview": "vite preview",
     "start": "node server.js"
