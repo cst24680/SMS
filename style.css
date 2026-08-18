@@ -83,9 +83,9 @@ img {
   position: relative;
   overflow: hidden;
   background:
-    radial-gradient(circle at top left, rgba(5, 150, 105, 0.3), transparent 35%),
-    radial-gradient(circle at bottom right, rgba(16, 185, 129, 0.15), transparent 40%),
-    linear-gradient(135deg, #0f172a 0%, #134e4a 35%, #047857 100%);
+    radial-gradient(circle at top left, rgba(59, 130, 246, 0.12), transparent 45%),
+    radial-gradient(circle at bottom right, rgba(16, 185, 129, 0.15), transparent 45%),
+    linear-gradient(135deg, #eff6ff 0%, #ecfdf5 55%, #fef3c7 100%);
   animation: fadeInUp 0.8s ease-out;
 }
 
@@ -94,8 +94,8 @@ img {
   position: absolute;
   inset: 0;
   background: 
-    linear-gradient(120deg, rgba(255,255,255,0.08), transparent 40%, rgba(255,255,255,0.06)),
-    radial-gradient(circle at 20% 50%, rgba(5, 150, 105, 0.1), transparent 50%);
+    linear-gradient(120deg, rgba(255,255,255,0.3), transparent 40%, rgba(255,255,255,0.2)),
+    radial-gradient(circle at 20% 50%, rgba(16, 185, 129, 0.08), transparent 50%);
   pointer-events: none;
 }
 
@@ -128,9 +128,9 @@ img {
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  background: rgba(255,255,255,0.14);
-  color: #ecfdf5;
-  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(16, 185, 129, 0.08);
+  color: #047857;
+  border: 1px solid rgba(16, 185, 129, 0.15);
 }
 
 .section-title {
@@ -214,16 +214,16 @@ img {
 }
 
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.18);
-  color: white;
-  border: 1.5px solid rgba(255,255,255,0.3);
+  background: rgba(15, 23, 42, 0.05);
+  color: #0f172a;
+  border: 1.5px solid rgba(15, 23, 42, 0.1);
   backdrop-filter: blur(8px);
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.25);
-  border-color: rgba(255,255,255,0.4);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  background: rgba(15, 23, 42, 0.08);
+  border-color: rgba(15, 23, 42, 0.15);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
 }
 
 .pill {
@@ -428,10 +428,12 @@ img {
 }
 
 .cta-banner {
-  background: linear-gradient(135deg, #065f46 0%, #047857 40%, #10b981 100%);
+  background: linear-gradient(135deg, #dcfce7 0%, #ecfdf5 40%, #a7f3d0 100%);
   position: relative;
   overflow: hidden;
-  box-shadow: 0 20px 50px rgba(5, 150, 105, 0.2);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  box-shadow: 0 20px 50px rgba(16, 185, 129, 0.1);
+  color: #065f46;
 }
 
 .cta-banner::before {
@@ -439,19 +441,19 @@ img {
   position: absolute;
   inset: 0;
   background: 
-    radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1), transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(255,255,255,0.05), transparent 50%);
+    radial-gradient(circle at 20% 50%, rgba(255,255,255,0.4), transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(255,255,255,0.2), transparent 50%);
   pointer-events: none;
 }
 
 .cta-banner:hover {
   transform: translateY(-3px);
-  box-shadow: 0 25px 60px rgba(5, 150, 105, 0.25);
+  box-shadow: 0 25px 60px rgba(16, 185, 129, 0.15);
 }
 
 .auth-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #0f172a 0%, #14532d 45%, #047857 100%);
+  background: linear-gradient(135deg, #eff6ff 0%, #ecfdf5 50%, #fef3c7 100%);
   color: var(--text);
 }
 

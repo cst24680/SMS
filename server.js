@@ -2,7 +2,8 @@ import express from 'express';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { getDB } from './database/db.js';
+import mongoose from 'mongoose';
+import { connectDB } from './database/db.js';
 import goalRoutes from './routes/goalRoutes.js';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -11,11 +12,59 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Connect to MongoDB
+connectDB();
+
 app.use(cors());
 app.use(express.json());
 
 // -------------------------------------------------------------
-// Login Endpoint (SQLite - Email OR Full Name)
+// MongoDB Schemas & Models
+// -------------------------------------------------------------
+const userSchema = new mongoose.Schema(
+  {
+    fullName: String,
+    email: { type: String, unique: true },
+    password: String,
+    age: String,
+    institution: String,
+    subjects: String,
+    location: String,
+    studyMode: String,
+  },
+  { timestamps: true }
+);
+
+userSchema.set('toJSON', {
+  virtuals: true,
+  versionKey: false,
+  transform: (doc, ret) => {
+    delete ret._id;
+  },
+});
+
+const User = mongoose.models.User || mongoose.model('User', userSchema);
+
+const partnerRequestSchema = new mongoose.Schema({
+  fromUserId: String,
+  toUserId: String,
+  status: String,
+  createdAt: String,
+  respondedAt: String,
+});
+const PartnerRequest =
+  mongoose.models.PartnerRequest || mongoose.model('PartnerRequest', partnerRequestSchema);
+
+const calendarEventSchema = new mongoose.Schema({
+  title: String,
+  date: String,
+  userId: String,
+});
+const CalendarEvent =
+  mongoose.models.CalendarEvent || mongoose.model('CalendarEvent', calendarEventSchema);
+
+// -------------------------------------------------------------
+// Login Endpoint (MongoDB - Email OR Full Name)
 // -------------------------------------------------------------
 app.post('/api/login', async (req, res) => {
   try {
@@ -27,26 +76,27 @@ app.post('/api/login', async (req, res) => {
       return res.status(400).json({ success: false, message: 'Username/Email and password are required.' });
     }
 
-    const db = await getDB();
-    const matchedUser = await db.get(
-      `SELECT * FROM users 
-       WHERE (LOWER(email) = LOWER(?) OR LOWER(fullName) = LOWER(?)) 
-         AND password = ?`,
-      [loginIdentifier, loginIdentifier, pass]
-    );
+    const matchedUser = await User.findOne({
+      $or: [
+        { email: new RegExp(`^${loginIdentifier}$`, 'i') },
+        { fullName: new RegExp(`^${loginIdentifier}$`, 'i') },
+      ],
+      password: pass,
+    });
 
     if (matchedUser) {
       return res.json({
         success: true,
         message: 'Login successful',
-        user: { 
-          name: matchedUser.fullName || matchedUser.email, 
+        user: {
+          id: matchedUser._id,
+          name: matchedUser.fullName || matchedUser.email,
           email: matchedUser.email,
           age: matchedUser.age,
           institution: matchedUser.institution,
           subjects: matchedUser.subjects,
           location: matchedUser.location,
-          studyMode: matchedUser.studyMode
+          studyMode: matchedUser.studyMode,
         },
       });
     }
@@ -63,8 +113,7 @@ app.post('/api/login', async (req, res) => {
 // -------------------------------------------------------------
 app.get('/api/users', async (req, res) => {
   try {
-    const db = await getDB();
-    const users = await db.all('SELECT * FROM users');
+    const users = await User.find({});
     res.json(users);
   } catch (error) {
     res.status(500).json({ message: 'Failed to fetch users.' });
@@ -87,20 +136,24 @@ app.post('/api/users', async (req, res) => {
       return res.status(400).json({ message: 'Email and password are required.' });
     }
 
-    const db = await getDB();
-    const existing = await db.get('SELECT * FROM users WHERE LOWER(email) = LOWER(?)', [email]);
+    const existing = await User.findOne({ email: new RegExp(`^${email}$`, 'i') });
     if (existing) {
       return res.status(400).json({ message: 'An account with this email already exists.' });
     }
 
-    const result = await db.run(
-      `INSERT INTO users (fullName, email, password, age, institution, subjects, location, studyMode)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-      [fullName, email, password, age, institution, subjects, location, studyMode]
-    );
+    const newUser = await User.create({
+      fullName,
+      email,
+      password,
+      age,
+      institution,
+      subjects,
+      location,
+      studyMode,
+    });
 
     res.status(201).json({
-      id: result.lastID,
+      id: newUser._id,
       fullName,
       email,
       message: 'Account created successfully!',
@@ -117,25 +170,50 @@ app.post('/api/users', async (req, res) => {
 app.use('/api', goalRoutes);
 
 // -------------------------------------------------------------
-// Additional Dashboard Helper Endpoints
+// Additional Dashboard Helper Endpoints (MongoDB)
 // -------------------------------------------------------------
 app.get('/api/partnerRequests', async (req, res) => {
   try {
-    const db = await getDB();
-    const rows = await db.all('SELECT * FROM partnerRequests');
+    const rows = await PartnerRequest.find({});
     res.json(rows);
   } catch {
     res.json([]);
   }
 });
 
+app.post('/api/partnerRequests', async (req, res) => {
+  try {
+    const newReq = await PartnerRequest.create(req.body);
+    res.status(201).json(newReq);
+  } catch {
+    res.status(500).json({ message: 'Failed to create partner request.' });
+  }
+});
+
+app.put('/api/partnerRequests/:id', async (req, res) => {
+  try {
+    const updated = await PartnerRequest.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    res.json(updated);
+  } catch {
+    res.status(500).json({ message: 'Failed to update partner request.' });
+  }
+});
+
 app.get('/api/calendarEvents', async (req, res) => {
   try {
-    const db = await getDB();
-    const rows = await db.all('SELECT * FROM calendarEvents');
+    const rows = await CalendarEvent.find({});
     res.json(rows);
   } catch {
     res.json([]);
+  }
+});
+
+app.post('/api/calendarEvents', async (req, res) => {
+  try {
+    const newEvent = await CalendarEvent.create(req.body);
+    res.status(201).json(newEvent);
+  } catch {
+    res.status(500).json({ message: 'Failed to create calendar event.' });
   }
 });
 
@@ -160,5 +238,5 @@ app.use(express.static(path.join(__dirname, 'dist')));
 app.get('*', (req, res) => res.sendFile(path.join(__dirname, 'dist', 'index.html')));
 
 app.listen(PORT, () => {
-  console.log(`StudyBuddy Exercise 8 SQLite Server running on http://localhost:${PORT}`);
+  console.log(`StudyBuddy Exercise 8 MongoDB Server running on http://localhost:${PORT}`);
 });

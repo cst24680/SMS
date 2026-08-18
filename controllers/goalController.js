@@ -1,17 +1,12 @@
-import { getDB } from '../database/db.js';
+import Goal from '../models/Goal.js';
 
-// GET All Records OR Filter by Subject (Query Parameter)
+// GET All / Filter by Subject (Query Parameter)
 export async function getGoals(req, res, next) {
   try {
-    const db = await getDB();
     const { subject } = req.query;
-
-    if (subject && subject.trim() !== '') {
-      const filtered = await db.all('SELECT * FROM goals WHERE LOWER(subject) = LOWER(?)', [subject.trim()]);
-      return res.json(filtered);
-    }
-
-    const goals = await db.all('SELECT * FROM goals');
+    const filter = subject ? { subject: new RegExp(`^${subject.trim()}$`, 'i') } : {};
+    
+    const goals = await Goal.find(filter);
     res.json(goals);
   } catch (error) {
     next(error);
@@ -21,50 +16,32 @@ export async function getGoals(req, res, next) {
 // GET Single Record by ID (Path Parameter)
 export async function getGoalById(req, res, next) {
   try {
-    const db = await getDB();
-    const goal = await db.get('SELECT * FROM goals WHERE id = ?', [req.params.id]);
-    
-    if (!goal) {
-      return res.status(404).json({ message: 'Goal record not found.' });
-    }
+    const goal = await Goal.findById(req.params.id);
+    if (!goal) return res.status(404).json({ message: 'Goal record not found.' });
     res.json(goal);
   } catch (error) {
-    next(error);
+    res.status(400).json({ message: 'Invalid ID format.' });
   }
 }
 
-// POST Create Record (with Input Validation)
+// POST Create Record
 export async function createGoal(req, res, next) {
   try {
-    const { title, subject, deadline, priority, dailyHours, studyMode } = req.body || {};
+    const { title, subject, deadline, priority, dailyHours, studyMode, userId } = req.body || {};
 
-    // User Input Validation
     if (!title || !title.trim() || !subject || !subject.trim() || !deadline) {
       return res.status(400).json({ message: 'Title, Subject, and Deadline are required fields.' });
     }
 
-    const db = await getDB();
-    const result = await db.run(
-      'INSERT INTO goals (title, subject, deadline, dailyHours, studyMode, priority) VALUES (?, ?, ?, ?, ?, ?)',
-      [
-        title.trim(),
-        subject.trim(),
-        deadline,
-        dailyHours || '1',
-        studyMode || 'Individual',
-        priority || 'Medium'
-      ]
-    );
-
-    const newGoal = {
-      id: result.lastID,
+    const newGoal = await Goal.create({
       title: title.trim(),
       subject: subject.trim(),
       deadline,
+      priority: priority || 'Medium',
       dailyHours: dailyHours || '1',
       studyMode: studyMode || 'Individual',
-      priority: priority || 'Medium'
-    };
+      userId: userId?.toString() || '1',
+    });
 
     res.status(201).json(newGoal);
   } catch (error) {
@@ -75,24 +52,24 @@ export async function createGoal(req, res, next) {
 // PUT Update Record
 export async function updateGoal(req, res, next) {
   try {
-    const { title, subject, deadline, priority } = req.body || {};
-    const { id } = req.params;
+    const { title, subject, deadline, priority, dailyHours, studyMode, userId } = req.body || {};
 
-    if (!title || !subject || !deadline) {
-      return res.status(400).json({ message: 'Title, Subject, and Deadline are required for updates.' });
-    }
-
-    const db = await getDB();
-    const result = await db.run(
-      'UPDATE goals SET title = ?, subject = ?, deadline = ?, priority = ? WHERE id = ?',
-      [title.trim(), subject.trim(), deadline, priority || 'Medium', id]
+    const updatedGoal = await Goal.findByIdAndUpdate(
+      req.params.id,
+      {
+        title,
+        subject,
+        deadline,
+        priority,
+        dailyHours,
+        studyMode,
+        ...(userId ? { userId: userId.toString() } : {}),
+      },
+      { new: true, runValidators: true }
     );
 
-    if (result.changes === 0) {
-      return res.status(404).json({ message: 'Goal not found.' });
-    }
-
-    res.json({ id: Number(id), title, subject, deadline, priority });
+    if (!updatedGoal) return res.status(404).json({ message: 'Goal not found.' });
+    res.json(updatedGoal);
   } catch (error) {
     next(error);
   }
@@ -101,13 +78,8 @@ export async function updateGoal(req, res, next) {
 // DELETE Record
 export async function deleteGoal(req, res, next) {
   try {
-    const db = await getDB();
-    const result = await db.run('DELETE FROM goals WHERE id = ?', [req.params.id]);
-
-    if (result.changes === 0) {
-      return res.status(404).json({ message: 'Goal not found.' });
-    }
-
+    const deletedGoal = await Goal.findByIdAndDelete(req.params.id);
+    if (!deletedGoal) return res.status(404).json({ message: 'Goal not found.' });
     res.status(204).end();
   } catch (error) {
     next(error);
