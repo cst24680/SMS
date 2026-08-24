@@ -5,15 +5,17 @@ import GoalList from './GoalList';
 import PartnerMatches from './PartnerMatches';
 import PartnerRequests from './PartnerRequests';
 import Profile from './Profile';
+import StudyActivityManager from './StudyActivityManager';
 
 const navItems = [
+  { id: 'records', label: 'Study Activity', icon: '◷' },
   { id: 'overview', label: 'Overview', icon: '⌂' },
   { id: 'calendar', label: 'Calendar', icon: '□' },
   { id: 'goals', label: 'Study Goals', icon: '✓' },
   { id: 'partners', label: 'Partners', icon: '♧' },
 ];
 
-function Dashboard({ currentUser, profile, users, goals, partnerRequests, calendarEvents, addGoal, updateGoal, deleteGoal, addCalendarEvent, sendPartnerRequest, respondToPartnerRequest, success, dataError }) {
+function Dashboard({ currentUser, profile, users, goals, partnerRequests, calendarEvents, addGoal, updateGoal, deleteGoal, addCalendarEvent, sendPartnerRequest, respondToPartnerRequest, onRequest, success, dataError }) {
   const [activeView, setActiveView] = useState('overview');
   const [searchTerm, setSearchTerm] = useState('');
   const [editingGoal, setEditingGoal] = useState(null);
@@ -51,6 +53,7 @@ function Dashboard({ currentUser, profile, users, goals, partnerRequests, calend
         {activeView === 'overview' && <div className="space-y-6"><div className="grid gap-4 sm:grid-cols-3"><div className="rounded-3xl bg-emerald-600 p-5 text-white"><p className="text-sm text-emerald-100">Active goals</p><p className="mt-2 text-4xl font-bold">{userGoals.length}</p></div><button type="button" onClick={() => setActiveView('calendar')} className="rounded-3xl bg-violet-600 p-5 text-left text-white transition hover:-translate-y-1"><p className="text-sm text-violet-100">Calendar tasks</p><p className="mt-2 text-4xl font-bold">{calendarEvents.filter((event) => event.userId === currentUser.id).length}</p></button><button type="button" onClick={() => setActiveView('partners')} className="rounded-3xl bg-slate-900 p-5 text-left text-white transition hover:-translate-y-1"><p className="text-sm text-slate-300">New requests</p><p className="mt-2 text-4xl font-bold">{incomingCount}</p></button></div><div className="grid gap-6 xl:grid-cols-[0.8fr_1.2fr]"><Profile profile={profile} /><section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm"><div className="flex items-center justify-between"><h2 className="text-xl font-bold">Upcoming deadlines</h2><button type="button" onClick={() => setActiveView('calendar')} className="text-sm font-semibold text-emerald-700">View calendar</button></div><div className="mt-4 space-y-3">{upcomingGoals.length ? upcomingGoals.map((goal) => <div key={goal.id} className="flex items-center justify-between rounded-2xl bg-slate-50 p-4"><div><p className="font-semibold text-slate-800">{goal.title}</p><p className="text-sm text-slate-500">{goal.subject}</p></div><span className="rounded-full bg-emerald-100 px-3 py-1 text-sm font-semibold text-emerald-700">{goal.deadline}</span></div>) : <p className="text-slate-500">No upcoming goal deadlines.</p>}</div></section></div></div>}
         {activeView === 'calendar' && <CalendarPlanner currentUser={currentUser} goals={goals} calendarEvents={calendarEvents} onAddEvent={addCalendarEvent} />}
         {activeView === 'goals' && <div className="grid gap-6 xl:grid-cols-[0.8fr_1.2fr]"><GoalForm editingGoal={editingGoal} onSubmit={handleGoalSubmit} onCancel={() => setEditingGoal(null)} /><section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm"><div className="flex flex-wrap items-center justify-between gap-3"><h2 className="text-xl font-bold text-slate-900">Your study goals</h2><input value={searchTerm} onChange={(event) => setSearchTerm(event.target.value)} onInput={(event) => setSearchTerm(event.target.value)} placeholder="Search goals" className="w-full rounded-full border border-slate-200 px-4 py-2 text-sm sm:w-52" /></div><div className="mt-6"><GoalList goals={filteredGoals} onEdit={setEditingGoal} onDelete={deleteGoal} onHover={() => {}} /></div></section></div>}
+        {activeView === 'records' && <StudyActivityManager onRequest={onRequest} currentUser={currentUser} goals={goals} />}
         {activeView === 'partners' && <div className="grid gap-6 xl:grid-cols-[1.6fr_0.8fr]"><PartnerMatches currentUser={currentUser} profile={profile} users={users} partnerRequests={partnerRequests} onConnect={sendPartnerRequest} /><PartnerRequests currentUser={currentUser} users={users} partnerRequests={partnerRequests} onRespond={respondToPartnerRequest} /></div>}
       </main>
     </div>

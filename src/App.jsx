@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import Navbar from './components/Navbar';
-import Home from './components/Home';
+import StudyHome from './components/StudyHome';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Dashboard from './components/Dashboard';
@@ -232,7 +232,7 @@ function App() {
     <div className="min-h-screen bg-slate-50 text-slate-900">
       <Navbar currentUser={currentUser} onLogout={handleLogout} setView={setView} />
       <main>
-        {view === 'home' && <Home setView={setView} />}
+        {view === 'home' && <StudyHome setView={setView} />}
         {view === 'login' && <Login onLogin={handleLogin} error={authError} success={successMessage} />}
         {view === 'signup' && <Signup onSignup={handleSignup} error={authError} success={successMessage} />}
         {view === 'dashboard' && currentUser && (

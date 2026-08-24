@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
+import { promises as fs } from 'fs';
 import { fileURLToPath } from 'url';
 import mongoose from 'mongoose';
 import { connectDB } from './database/db.js';
@@ -11,6 +12,25 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const STUDY_RECORD_DIRECTORY = path.join(__dirname, 'data', 'study-records');
+let studyRecordFileName = 'study-record.txt';
+
+function getSafeRecordFileName(fileName) {
+  const normalized = (fileName || '').toString().trim();
+  if (!/^[a-zA-Z0-9][a-zA-Z0-9._-]*\.txt$/.test(normalized) || path.basename(normalized) !== normalized) {
+    throw new Error('Use a simple .txt filename (letters, numbers, dots, hyphens, or underscores).');
+  }
+  return normalized;
+}
+
+function getStudyRecordPath(fileName = studyRecordFileName) {
+  return path.join(STUDY_RECORD_DIRECTORY, getSafeRecordFileName(fileName));
+}
+
+async function readStudyRecord() {
+  const content = await fs.readFile(getStudyRecordPath(), 'utf8');
+  return { fileName: studyRecordFileName, content };
+}
 
 // Connect to MongoDB
 connectDB();
@@ -62,6 +82,25 @@ const calendarEventSchema = new mongoose.Schema({
 });
 const CalendarEvent =
   mongoose.models.CalendarEvent || mongoose.model('CalendarEvent', calendarEventSchema);
+
+const studyActivitySchema = new mongoose.Schema(
+  {
+    userId: { type: String, required: true, index: true },
+    goalId: { type: String, required: true },
+    goalTitle: { type: String, required: true },
+    subject: { type: String, required: true },
+    date: { type: String, required: true },
+    duration: { type: Number, required: true },
+    notes: { type: String, required: true },
+  },
+  { timestamps: true }
+);
+studyActivitySchema.set('toJSON', {
+  virtuals: true,
+  versionKey: false,
+  transform: (doc, ret) => { delete ret._id; },
+});
+const StudyActivity = mongoose.models.StudyActivity || mongoose.model('StudyActivity', studyActivitySchema);
 
 // -------------------------------------------------------------
 // Login Endpoint (MongoDB - Email OR Full Name)
@@ -217,8 +256,94 @@ app.post('/api/calendarEvents', async (req, res) => {
   }
 });
 
-app.get('/api/study-record', (req, res) => {
-  res.json({ fileName: 'study-record.txt', content: 'Study session record initialized.' });
+// StudyBuddy activity history: persisted in MongoDB for the dashboard.
+app.get('/api/study-activities', async (req, res) => {
+  try {
+    const userId = (req.query.userId || '').toString();
+    if (!userId) return res.status(400).json({ message: 'User ID is required.' });
+    const activities = await StudyActivity.find({ userId }).sort({ date: -1, createdAt: -1 });
+    res.json(activities);
+  } catch {
+    res.status(500).json({ message: 'Failed to load study activity.' });
+  }
+});
+
+app.post('/api/study-activities', async (req, res) => {
+  try {
+    const { userId, goalId, goalTitle, subject, date, duration, notes } = req.body || {};
+    if (!userId || !goalId || !goalTitle || !subject || !date || !duration || !notes?.trim()) {
+      return res.status(400).json({ message: 'Goal, date, duration, and progress notes are required.' });
+    }
+    const activity = await StudyActivity.create({ userId: userId.toString(), goalId: goalId.toString(), goalTitle: goalTitle.trim(), subject: subject.trim(), date, duration: Number(duration), notes: notes.trim() });
+    res.status(201).json(activity);
+  } catch {
+    res.status(500).json({ message: 'Failed to save the study session.' });
+  }
+});
+
+app.delete('/api/study-activities/:id', async (req, res) => {
+  try {
+    const deletedActivity = await StudyActivity.findByIdAndDelete(req.params.id);
+    if (!deletedActivity) return res.status(404).json({ message: 'Study session not found.' });
+    res.status(204).end();
+  } catch {
+    res.status(400).json({ message: 'Invalid study session ID.' });
+  }
+});
+
+// Exercise 7: FS operations stay in Node.js; React only calls these APIs.
+app.post('/api/study-record', async (req, res) => {
+  try {
+    await fs.mkdir(STUDY_RECORD_DIRECTORY, { recursive: true });
+    await fs.writeFile(getStudyRecordPath(), (req.body?.content || '').toString(), 'utf8');
+    res.status(201).json(await readStudyRecord());
+  } catch (error) {
+    res.status(400).json({ message: error.message || 'Failed to create the study record.' });
+  }
+});
+
+app.get('/api/study-record', async (req, res) => {
+  try {
+    res.json(await readStudyRecord());
+  } catch (error) {
+    res.status(error.code === 'ENOENT' ? 404 : 500).json({ message: error.code === 'ENOENT' ? 'No study record exists yet. Create one first.' : 'Failed to read the study record.' });
+  }
+});
+
+app.patch('/api/study-record', async (req, res) => {
+  try {
+    const filePath = getStudyRecordPath();
+    await fs.access(filePath);
+    const content = (req.body?.content || '').toString();
+    await fs.appendFile(filePath, content ? `\n${content}` : '', 'utf8');
+    res.json(await readStudyRecord());
+  } catch (error) {
+    res.status(error.code === 'ENOENT' ? 404 : 400).json({ message: error.code === 'ENOENT' ? 'No study record exists yet. Create one before appending.' : error.message || 'Failed to append to the study record.' });
+  }
+});
+
+app.patch('/api/study-record/rename', async (req, res) => {
+  try {
+    const nextFileName = getSafeRecordFileName(req.body?.fileName);
+    const currentPath = getStudyRecordPath();
+    const nextPath = getStudyRecordPath(nextFileName);
+    await fs.access(currentPath);
+    if (nextFileName !== studyRecordFileName) await fs.rename(currentPath, nextPath);
+    studyRecordFileName = nextFileName;
+    res.json(await readStudyRecord());
+  } catch (error) {
+    res.status(error.code === 'ENOENT' ? 404 : 400).json({ message: error.code === 'ENOENT' ? 'No study record exists yet. Create one before renaming.' : error.message || 'Failed to rename the study record.' });
+  }
+});
+
+app.delete('/api/study-record', async (req, res) => {
+  try {
+    await fs.unlink(getStudyRecordPath());
+    studyRecordFileName = 'study-record.txt';
+    res.status(204).end();
+  } catch (error) {
+    res.status(error.code === 'ENOENT' ? 404 : 500).json({ message: error.code === 'ENOENT' ? 'No study record exists to delete.' : 'Failed to delete the study record.' });
+  }
 });
 
 // -------------------------------------------------------------
